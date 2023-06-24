@@ -1,0 +1,6 @@
+axis_controller_f401 Debug.launch
+.settings/com.st.stm32cube.ide.mcu.sfrview.prefs
+.settings/language.settings.xml
+.settings/stm32cubeide.project.prefs
+Debug/
+Drivers/CMSIS/
