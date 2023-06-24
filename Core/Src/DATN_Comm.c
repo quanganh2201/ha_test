@@ -8,7 +8,7 @@
 #include "string.h"
 S_SPI_RECEIVE s_SPI_handler;
 S_UART_RECEIVE s_UART_handler;
-extern SPI_HandleTypeDef SLAVE_SPI;
+//extern SPI_HandleTypeDef SLAVE_SPI;
 extern UART_HandleTypeDef huart2;
 
 void Init()
@@ -18,50 +18,50 @@ void Init()
 }
 
 
-void SPI2_IRQHandler(void)
-{
-  HAL_SPI_IRQHandler(&SLAVE_SPI);
-  HAL_SPI_Receive_IT(&SLAVE_SPI, &s_SPI_handler.Rx, 1);
-
-  switch(s_SPI_handler.index)
-  {
-  case 0:
-	  if(s_SPI_handler.Rx == 0x0D)
-	  {
-		  s_SPI_handler.index = 1;
-	  }
-	  break;
-  case 1:
-	  if(s_SPI_handler.Rx == 0x01)
-	  {
-		  s_SPI_handler.index = 2;
-		  s_SPI_handler.action = params;
-	  }else if(s_SPI_handler.Rx == 0x02)
-	  {
-		  s_SPI_handler.dataValid = true;
-		  s_SPI_handler.index = 0;
-		  s_SPI_handler.action = start;
-	  }else if (s_SPI_handler.Rx == 0x03)
-	  {
-		  s_SPI_handler.dataValid = true;
-		  s_SPI_handler.index = 0;
-		  s_SPI_handler.action = stop;
-	  }
-	  break;
-  default:
-	  if(s_SPI_handler.index < 14 && s_SPI_handler.dataValid == false)
-	  {
-		  s_SPI_handler.params[s_SPI_handler.index-1] = s_SPI_handler.Rx;
-		  s_SPI_handler.index++;
-	  }
-	  if (s_SPI_handler.index >= 14)
-	  {
-		  s_SPI_handler.dataValid = true;
-	  }
-	  break;
-  }
-
-}
+//void SPI2_IRQHandler(void)
+//{
+//  HAL_SPI_IRQHandler(&SLAVE_SPI);
+//  HAL_SPI_Receive_IT(&SLAVE_SPI, &s_SPI_handler.Rx, 1);
+//
+//  switch(s_SPI_handler.index)
+//  {
+//  case 0:
+//	  if(s_SPI_handler.Rx == 0x0D)
+//	  {
+//		  s_SPI_handler.index = 1;
+//	  }
+//	  break;
+//  case 1:
+//	  if(s_SPI_handler.Rx == 0x01)
+//	  {
+//		  s_SPI_handler.index = 2;
+//		  s_SPI_handler.action = params;
+//	  }else if(s_SPI_handler.Rx == 0x02)
+//	  {
+//		  s_SPI_handler.dataValid = true;
+//		  s_SPI_handler.index = 0;
+//		  s_SPI_handler.action = start;
+//	  }else if (s_SPI_handler.Rx == 0x03)
+//	  {
+//		  s_SPI_handler.dataValid = true;
+//		  s_SPI_handler.index = 0;
+//		  s_SPI_handler.action = stop;
+//	  }
+//	  break;
+//  default:
+//	  if(s_SPI_handler.index < 14 && s_SPI_handler.dataValid == false)
+//	  {
+//		  s_SPI_handler.params[s_SPI_handler.index-1] = s_SPI_handler.Rx;
+//		  s_SPI_handler.index++;
+//	  }
+//	  if (s_SPI_handler.index >= 14)
+//	  {
+//		  s_SPI_handler.dataValid = true;
+//	  }
+//	  break;
+//  }
+//
+//}
 
 //void dataProcessing()
 //{
