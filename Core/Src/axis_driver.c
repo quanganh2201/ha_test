@@ -7,6 +7,59 @@
 
 #include "axis_driver.h"
 
+int PID(float ref, float pitch, float dt, uint8_t pid_flag) {
+    float P = 0, I = 0, D = 0, pid_pwm = 0;
+    float lastError = 0;
+    float error = 0;
+    //calculate error
+    if(ref > pitch)
+    {
+        error = (ref - pitch);
+    }
+    else
+    {
+        error = (pitch - ref);
+    }
+
+    //calculate Proportional term
+    P = Kp * error;
+
+////    calculate Integral term. Account for wind-up
+    if(pid_flag==1)
+        I+=Ki* error ;
+    else
+        I+=0.5*error; // If the robot has to move the Ki term should be lower so there are less oscillation
+
+    if (I > MAX_PWM)
+        I = MAX_PWM;
+    else if (I<MIN_PWM){
+        I=MIN_PWM;
+    }
+
+    ////calculate Derivative term
+    D = -Kd * (error - lastError);
+
+    // If the robot has to move the control low is PI so the movement is more fluid
+    if(pid_flag == 0){
+        D = 0;
+    }
+
+    //total PID value
+    pid_pwm = P + I + D;
+
+    //max sure pwm is bound between allowed min/max thresholds
+
+    int out_pwm = (int) (pid_pwm);
+    if (pid_pwm > MAX_PWM)
+        out_pwm = MAX_PWM;
+    else if (pid_pwm < MIN_PWM)
+        out_pwm = MIN_PWM;
+
+    lastError = error;
+
+    return out_pwm;
+
+}
 ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t axis_pin_num, uint16_t encoder_val)
 {
     uint8_t ret_val = ERR;

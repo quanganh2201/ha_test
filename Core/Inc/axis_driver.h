@@ -27,6 +27,13 @@ typedef struct
 
 #define ANGLE_CONVERT_VAL     (18.0555555555) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
+#define Kp                    (1U)
+#define Ki                    (0U)
+#define Kd                    (20U)
+
+#define MAX_PWM 500
+#define MIN_PWM 0
+
 
 ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t axis_pin_num, uint16_t encoder_val);
 ret_val_t auto_home(uint16_t *axis_pin_num);
