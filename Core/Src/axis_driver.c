@@ -6,7 +6,7 @@
  */
 
 #include "axis_driver.h"
-
+uint32_t timelapse;
 int PID(float ref, float pitch, float dt, uint8_t pid_flag) {
     float P = 0, I = 0, D = 0, pid_pwm = 0;
     float lastError = 0;
@@ -64,11 +64,26 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
 {
     uint8_t ret_val = ERR;
     uint16_t pwm_val = 0;
-    axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
+    uint32_t chA = 0;
+    uint32_t chB = 0;
+//    axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
+
     /*PWM*/
-    pwm_val = (uint16_t)PID(axis->desired_value, encoder_val, 0.005, 1);
-    HAL_TIM_PWM_Start (&htim1, TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start (&htim1, TIM_CHANNEL_1);
+    axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 0.005, 1);
+    /*Select channel*/
+    if(0 == axis->channel_pin_set)
+    {
+        chA = TIM_CHANNEL_1;
+        chB = TIM_CHANNEL_2;
+    }
+    else
+    {
+        chA = TIM_CHANNEL_3;
+        chB = TIM_CHANNEL_4;
+    }
+
+//    HAL_TIM_PWM_Start (htim, chA);
+//    HAL_TIM_PWM_Start (htim, chB);
     /*1300 ~ 360 degree*/
     if (axis->desired_value != 0)
     {
@@ -84,17 +99,17 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
 //        {
 //            HAL_GPIO_WritePin(GPIOB,axis_pin_num, SET);
 //        }
-        if(encoder_val < desired_value )
+        if(encoder_val < axis->desired_value)
         {
-            axis->dir = CW;
-            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1, 0);
-            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2, pwm_val);
+            __HAL_TIM_SET_COMPARE(htim, chA, 0);
+            __HAL_TIM_SET_COMPARE(htim, chB, axis->pwm);
+//            axis->dir = CW;
         }
         else
         {
-            axis->dir = CCW;
-            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1, pwm_val);
-            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2, 0);
+            __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+            __HAL_TIM_SET_COMPARE(htim, chB, 0);
+//            axis->dir = CCW;
         }
 
     }

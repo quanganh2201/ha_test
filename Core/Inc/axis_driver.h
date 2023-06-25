@@ -26,7 +26,7 @@ typedef struct
     uint16_t pwm;
     uint16_t angle;
     uint32_t desired_value;
-    uint16_t axis_pin_num;
+    _Bool channel_pin_set; /*0: ch1 ch2, 1: ch3 ch4*/
     dir_t dir; /*direction of motor*/
 }M_axis_t;
 
@@ -34,8 +34,8 @@ typedef struct
 #define ANGLE_CONVERT_VAL     (18.0555555555) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
 #define Kp                    (1U)
-#define Ki                    (0U)
-#define Kd                    (20U)
+#define Ki                    (10U)
+#define Kd                    (25U)
 
 #define MAX_PWM 500
 #define MIN_PWM 0
