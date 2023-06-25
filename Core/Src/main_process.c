@@ -7,7 +7,7 @@
 #include "main_process.h"
 
 extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef huart6;
 S_PROCESS sProcess;
 
 static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
@@ -49,7 +49,7 @@ void main_process()
 			sProcess.frameRear[2] = sModule4Params.speed;
 			sProcess.frameRear[3] = (uint16_t) (sProcess.frameRear[0] ^sProcess.frameRear[1]^sProcess.frameRear[2]);
 			HAL_UART_Transmit(&huart2, (uint8_t *)sProcess.frameFront, sizeof(sProcess.frameFront), 10);
-			HAL_UART_Transmit(&huart3, (uint8_t *)sProcess.frameRear, sizeof(sProcess.frameRear), 10);
+			HAL_UART_Transmit(&huart6, (uint8_t *)sProcess.frameRear, sizeof(sProcess.frameRear), 10);
 			SendBLDCTimeout(100, RESET1);
 		}
 		sProcess.process++;

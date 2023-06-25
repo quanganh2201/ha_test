@@ -71,7 +71,30 @@ void Init()
 //	}
 //}
 
+// void HAL_UART_RxCpltCallback()
+// {
+// 	HAL_UART_IRQHandler(&huart2);
+// 	HAL_UART_Receive_IT(&huart2, &s_UART_handler.Rx, 1);
 
+// 	switch(s_UART_handler.index)
+// 	{
+// 	case 0:
+// 		if (s_UART_handler.Rx == 0x24)
+// 			{
+// 			s_UART_handler.index++;
+// 			s_UART_handler.params[0]= s_UART_handler.Rx;
+// 			}
+// 		break;
+// 	default:
+// 			s_UART_handler.params[s_UART_handler.index++] = s_UART_handler.Rx;
+// 		if(s_UART_handler.index >= 16)
+// 		{
+// 			s_UART_handler.dataValid = 1;
+// 			s_UART_handler.index = 0;
+// 		}
+// 		break;
+// 	}
+// }
 
 
 void USART2_IRQHandler(void)
