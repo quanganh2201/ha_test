@@ -11,7 +11,11 @@
 
 
 
-
+typedef enum
+{
+    CW,
+    CCW
+}dir_t;
 typedef enum
 {
     ERR,
@@ -22,6 +26,8 @@ typedef struct
     uint16_t pwm;
     uint16_t angle;
     uint32_t desired_value;
+    uint16_t axis_pin_num;
+    dir_t dir; /*direction of motor*/
 }M_axis_t;
 
 
@@ -35,7 +41,7 @@ typedef struct
 #define MIN_PWM 0
 
 
-ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t axis_pin_num, uint16_t encoder_val);
+//ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t axis_pin_num, uint16_t encoder_val);
 ret_val_t auto_home(uint16_t *axis_pin_num);
 
 

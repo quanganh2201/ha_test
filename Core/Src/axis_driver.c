@@ -60,26 +60,43 @@ int PID(float ref, float pitch, float dt, uint8_t pid_flag) {
     return out_pwm;
 
 }
-ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t axis_pin_num, uint16_t encoder_val)
+ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val)
 {
     uint8_t ret_val = ERR;
+    uint16_t pwm_val = 0;
     axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
     /*PWM*/
+    pwm_val = (uint16_t)PID(axis->desired_value, encoder_val, 0.005, 1);
+    HAL_TIM_PWM_Start (&htim1, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start (&htim1, TIM_CHANNEL_1);
     /*1300 ~ 360 degree*/
     if (axis->desired_value != 0)
     {
-        if(encoder_val > (axis->desired_value - CALIB_VAL))
+//        if(encoder_val > (axis->desired_value - CALIB_VAL))
+//        {
+//            HAL_GPIO_WritePin(GPIOB,axis_pin_num, RESET);
+//            axis->desired_value = 0;
+//            axis->angle = 0;
+//            __HAL_TIM_SET_COUNTER(htim, 0);
+//            ret_val = SUCCESSFUL;
+//        }
+//        else
+//        {
+//            HAL_GPIO_WritePin(GPIOB,axis_pin_num, SET);
+//        }
+        if(encoder_val < desired_value )
         {
-            HAL_GPIO_WritePin(GPIOB,axis_pin_num, RESET);
-            axis->desired_value = 0;
-            axis->angle = 0;
-            __HAL_TIM_SET_COUNTER(htim, 0);
-            ret_val = SUCCESSFUL;
+            axis->dir = CW;
+            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1, 0);
+            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2, pwm_val);
         }
         else
         {
-            HAL_GPIO_WritePin(GPIOB,axis_pin_num, SET);
+            axis->dir = CCW;
+            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1, pwm_val);
+            __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2, 0);
         }
+
     }
     return ret_val;
 }
