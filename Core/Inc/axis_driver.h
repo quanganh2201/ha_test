@@ -33,9 +33,7 @@ typedef struct
 
 #define ANGLE_CONVERT_VAL     (18.0555555555) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
-#define Kp                    (1U)
-#define Ki                    (10U)
-#define Kd                    (25U)
+
 
 #define MAX_PWM 500
 #define MIN_PWM 0

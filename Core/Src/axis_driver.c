@@ -6,12 +6,21 @@
  */
 
 #include "axis_driver.h"
-uint32_t timelapse;
-int PID(float ref, float pitch, float dt, uint8_t pid_flag) {
-    float P = 0, I = 0, D = 0, pid_pwm = 0;
+
+const float Kp= 1;
+const float  Ki = 0;
+const float  Kd = 20;
+
+int PID(float ref, float pitch, uint8_t pid_flag){
+    float P = 0, I = 0, D = 0 , pid_pwm = 0;
     float lastError = 0;
     float error = 0;
     //calculate error
+//    float a;
+//    a = (float)(HAL_GetTick()/( 1.0e6 ));
+//    curTime = HAL_GetTick();
+//    dt = curTime - previousTime;
+//    dt= 0.005;
     if(ref > pitch)
     {
         error = (ref - pitch);
@@ -25,10 +34,12 @@ int PID(float ref, float pitch, float dt, uint8_t pid_flag) {
     P = Kp * error;
 
 ////    calculate Integral term. Account for wind-up
+    static float i_err;
+    i_err+= error;
     if(pid_flag==1)
-        I+=Ki* error ;
+        I+=Ki* i_err;
     else
-        I+=0.5*error; // If the robot has to move the Ki term should be lower so there are less oscillation
+        I+=0.5*i_err; // If the robot has to move the Ki term should be lower so there are less oscillation
 
     if (I > MAX_PWM)
         I = MAX_PWM;
@@ -37,8 +48,8 @@ int PID(float ref, float pitch, float dt, uint8_t pid_flag) {
     }
 
     ////calculate Derivative term
-    D = -Kd * (error - lastError);
-
+    D = Kd * (error - lastError); //dt;
+//    previousTime = HAL_GetTick();
     // If the robot has to move the control low is PI so the movement is more fluid
     if(pid_flag == 0){
         D = 0;
@@ -69,7 +80,8 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
 //    axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
 
     /*PWM*/
-    axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 0.005, 1);
+    axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 1);
+//    axis->pwm = 400;
     /*Select channel*/
     if(0 == axis->channel_pin_set)
     {

@@ -53,6 +53,9 @@ UART_HandleTypeDef huart6;
 
 /* USER CODE BEGIN PV */
 volatile uint32_t cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0;
+uint32_t DT = 0;
+uint32_t previousTime;
+uint32_t curTime = 0;;
 M_axis_t axis1 = {0};
 M_axis_t axis2 = {0};
 M_axis_t axis3 = {0};
@@ -171,7 +174,10 @@ int main(void)
 //      axis1.angle = 30;
       axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
       /*PA6 PA7*/
+      curTime = HAL_GetTick();
+      DT = curTime - previousTime;
       pwm_handler(&htim3, &axis1, cnt1);
+      previousTime = HAL_GetTick();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
