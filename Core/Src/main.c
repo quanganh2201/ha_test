@@ -50,7 +50,7 @@ TIM_HandleTypeDef htim5;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart6;
-
+#define MIN_VAL (5U)
 /* USER CODE BEGIN PV */
 volatile uint32_t cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0;
 uint32_t DT = 0;
@@ -93,7 +93,16 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
              if(axis1.dir)
                  cnt1++;
              else
-                 cnt1--;
+             {
+                 if(cnt1 > MIN_VAL)
+                 {
+                     cnt1--;
+                 }
+                 else
+                 {
+                     cnt1 = 0;
+                 }
+             }
         }
         axis2.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)
@@ -101,7 +110,16 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
              if(axis2.dir)
                  cnt2++;
              else
-                 cnt2--;
+             {
+                 if(cnt2 > MIN_VAL)
+                 {
+                     cnt2--;
+                 }
+                 else
+                 {
+                     cnt2 = 0;
+                 }
+             }
         }
         axis3.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14);
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3)
@@ -109,7 +127,16 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
              if(axis3.dir)
                  cnt3++;
              else
-                 cnt3--;
+             {
+                 if(cnt3 > MIN_VAL)
+                 {
+                     cnt3--;
+                 }
+                 else
+                 {
+                     cnt3 = 0;
+                 }
+             }
         }
     }
     if (htim->Instance == htim5.Instance)
@@ -120,7 +147,16 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
              if(axis4.dir)
                  cnt4++;
              else
-                 cnt4--;
+             {
+                 if(cnt4 > MIN_VAL)
+                 {
+                     cnt4--;
+                 }
+                 else
+                 {
+                     cnt4 = 0;
+                 }
+             }
         }
     }
 }
@@ -190,19 +226,16 @@ int main(void)
   while (1)
   {
 //      main_process();
-//      axis1.channel_pin_set = 0; /*ch1 + ch2*/
+      /*test 4 encoders in reality*/
       axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
       pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
 
-//      axis2.channel_pin_set = 1; /*ch1 + ch2*/
       axis2.desired_value = (uint32_t)(axis2.angle * ANGLE_CONVERT_VAL);
       pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
 
-//      axis3.channel_pin_set = 0; /*ch1 + ch2*/
       axis3.desired_value = (uint32_t)(axis3.angle * ANGLE_CONVERT_VAL);
       pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
 
-//      axis4.channel_pin_set = 1; /*ch1 + ch2*/
       axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
       pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
     /* USER CODE END WHILE */

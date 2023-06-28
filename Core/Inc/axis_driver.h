@@ -36,7 +36,7 @@ typedef struct
 }M_axis_t;
 
 
-#define ANGLE_CONVERT_VAL     (18.0555555555) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
+#define ANGLE_CONVERT_VAL     (18.0555555555/4) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
 
 
