@@ -36,10 +36,15 @@ int Swerve_angleOptimization(float inputAngle,uint8_t wheelN0)
 
 void Swerve_CoefitionCal(float Vx,float Vy, float w)
 {
-	A = COE_A(Vx,w);
-	B = COE_B(Vx,w);
-	C = COE_C(Vy,w);
-	D = COE_D(Vy,w);
+//	A = COE_A(Vx,w);
+//	B = COE_B(Vx,w);
+//	C = COE_C(Vy,w);
+//	D = COE_D(Vy,w);
+
+	A = Vx-w*(BASE_LENGHT/2);
+	B = Vx+w*(BASE_LENGHT/2);
+	C = Vy-w*(BASE_WIDTH/2);
+	D = Vy+w*(BASE_WIDTH/2);
 }
 
 float Swerve_Speed(uint8_t wheelN0)
@@ -70,16 +75,16 @@ int Swerve_Angle(uint8_t wheelN0)
 	switch(wheelN0)
 	{
 	case 1:
-		tmp = (float)atan2(B,C)*180/PI;
+		tmp = atan2(C,B)*180/PI;
 		break;
 	case 2:
-		tmp = (float)atan2(B,D)*180/PI;
+		tmp = atan2(B,D)*180/PI;
 		break;
 	case 3:
-		tmp = (float)atan2(A,D)*180/PI;
+		tmp = atan2(D,A)*180/PI;
 		break;
 	case 4:
-		tmp = (float)atan2(A,C)*180/PI;
+		tmp = atan2(A,C)*180/PI;
 		break;
 	}//return ((int)tmp);
 	return (Swerve_angleOptimization(tmp,wheelN0));
