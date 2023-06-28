@@ -177,7 +177,10 @@ int main(void)
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_4);
 
-
+  HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_4);
 //  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
   /* USER CODE END 2 */
 
@@ -191,9 +194,17 @@ int main(void)
       axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
       pwm_handler(&htim3, &axis1, cnt1);
 
+      axis2.channel_pin_set = 1; /*ch1 + ch2*/
+      axis2.desired_value = (uint32_t)(axis2.angle * ANGLE_CONVERT_VAL);
+      pwm_handler(&htim3, &axis2, cnt2);
+
+      axis3.channel_pin_set = 0; /*ch1 + ch2*/
+      axis3.desired_value = (uint32_t)(axis3.angle * ANGLE_CONVERT_VAL);
+      pwm_handler(&htim4, &axis3, cnt3);
+
       axis4.channel_pin_set = 1; /*ch1 + ch2*/
       axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim3, &axis4, cnt4);
+      pwm_handler(&htim4, &axis4, cnt4);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
