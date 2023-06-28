@@ -10,6 +10,7 @@
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 S_PROCESS sProcess;
+uint8_t RotateOK;
 
 static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
 {
@@ -29,7 +30,6 @@ static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
 	}
 	return flagFinishTask;
 }
-uint8_t RotateOK;
 void main_process()
 {
 	switch(sProcess.process)
@@ -59,15 +59,16 @@ void main_process()
 		if(RotateOK)// CHO HAM QUAY HUONG VAO DAY
 		{
 
-		} else if (!RotateOK)
-		{
-//			if ( && SendBLDCTimeout(10000, SET1))
-//			sModule1Params.speed = 0;
-//			sModule2Params.speed = 0;
-//			sModule3Params.speed = 0;
-//			sModule4Params.speed = 0;
-//			SendBLDCTimeout(10000, RESET1);
 		}
+//		else if (!RotateOK)
+//		{
+////			if ( && SendBLDCTimeout(10000, SET1))
+////			sModule1Params.speed = 0;
+////			sModule2Params.speed = 0;
+////			sModule3Params.speed = 0;
+////			sModule4Params.speed = 0;
+////			SendBLDCTimeout(10000, RESET1);
+//		}
 		sProcess.process = UARThandler;
 		break;
 	default:

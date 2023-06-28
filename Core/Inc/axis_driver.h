@@ -21,12 +21,17 @@ typedef enum
     ERR,
     SUCCESSFUL
 }ret_val_t;
+typedef enum
+{
+    CH1_CH2,
+    CH3_CH4
+}pwm_pin_set_t;
 typedef struct
 {
     uint16_t pwm;
     uint16_t angle;
     uint32_t desired_value;
-    _Bool channel_pin_set; /*0: ch1 ch2, 1: ch3 ch4*/
+    pwm_pin_set_t channel_pin_set; /*0: ch1 ch2, 1: ch3 ch4*/
     dir_t dir; /*direction of motor*/
 }M_axis_t;
 
@@ -38,8 +43,7 @@ typedef struct
 #define MAX_PWM 500
 #define MIN_PWM 0
 
-
-//ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t axis_pin_num, uint16_t encoder_val);
+ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set);
 ret_val_t auto_home(uint16_t *axis_pin_num);
 
 

@@ -190,21 +190,21 @@ int main(void)
   while (1)
   {
 //      main_process();
-      axis1.channel_pin_set = 0; /*ch1 + ch2*/
+//      axis1.channel_pin_set = 0; /*ch1 + ch2*/
       axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim3, &axis1, cnt1);
+      pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
 
-      axis2.channel_pin_set = 1; /*ch1 + ch2*/
+//      axis2.channel_pin_set = 1; /*ch1 + ch2*/
       axis2.desired_value = (uint32_t)(axis2.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim3, &axis2, cnt2);
+      pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
 
-      axis3.channel_pin_set = 0; /*ch1 + ch2*/
+//      axis3.channel_pin_set = 0; /*ch1 + ch2*/
       axis3.desired_value = (uint32_t)(axis3.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim4, &axis3, cnt3);
+      pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
 
-      axis4.channel_pin_set = 1; /*ch1 + ch2*/
+//      axis4.channel_pin_set = 1; /*ch1 + ch2*/
       axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim4, &axis4, cnt4);
+      pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
