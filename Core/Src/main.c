@@ -81,20 +81,20 @@ static void MX_TIM2_Init(void);
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-    axis1.dir = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
-    if ( htim->Instance == htim2.Instance)
+    /*Axis 1: channel 1, pin A8*/
+
+
+    if (htim->Instance == htim2.Instance)
     {
+        /*Axis 1: channel 1, pin A8*/
+        axis1.dir = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
-         {
+        {
              if(axis1.dir)
-             {
                  cnt1++;
-             }
              else
-             {
                  cnt1--;
-             }
-         }
+        }
     }
 
 //  if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)
@@ -171,13 +171,8 @@ int main(void)
   {
 //      main_process();
       axis1.channel_pin_set = 0; /*ch1 + ch2*/
-//      axis1.angle = 30;
       axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
-      /*PA6 PA7*/
-      curTime = HAL_GetTick();
-      DT = curTime - previousTime;
       pwm_handler(&htim3, &axis1, cnt1);
-      previousTime = HAL_GetTick();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
