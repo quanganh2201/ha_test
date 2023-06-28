@@ -95,20 +95,34 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
              else
                  cnt1--;
         }
+        axis2.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
+        if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)
+        {
+             if(axis2.dir)
+                 cnt2++;
+             else
+                 cnt2--;
+        }
+        axis3.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14);
+        if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3)
+        {
+             if(axis3.dir)
+                 cnt3++;
+             else
+                 cnt3--;
+        }
     }
-
-//  if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)
-//  {
-//      cnt2++;
-//  }
-//  if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3)
-//  {
-//      cnt3++;
-//  }
-//  if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_4)
-//  {
-//      cnt4++;
-//  }
+    if (htim->Instance == htim5.Instance)
+    {
+        axis4.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13);
+        if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+        {
+             if(axis4.dir)
+                 cnt4++;
+             else
+                 cnt4--;
+        }
+    }
 }
 /* USER CODE END 0 */
 
@@ -152,6 +166,9 @@ int main(void)
   /*TIM3,4: pwm*/
   /*For encoder handler*/
   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
+  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
+  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
+  HAL_TIM_IC_Start_IT(&htim5, TIM_CHANNEL_1);
 //  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
 //  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
   /*Start pwm*/
@@ -173,6 +190,10 @@ int main(void)
       axis1.channel_pin_set = 0; /*ch1 + ch2*/
       axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
       pwm_handler(&htim3, &axis1, cnt1);
+
+      axis4.channel_pin_set = 1; /*ch1 + ch2*/
+      axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
+      pwm_handler(&htim3, &axis4, cnt4);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
