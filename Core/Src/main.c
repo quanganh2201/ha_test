@@ -94,7 +94,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt1++;
              else
              {
-                 if(cnt1 > MIN_VAL)
+                 if(cnt1 > MIN_AXIS_VAL)
                  {
                      cnt1--;
                  }
@@ -111,7 +111,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt2++;
              else
              {
-                 if(cnt2 > MIN_VAL)
+                 if(cnt2 > MIN_AXIS_VAL)
                  {
                      cnt2--;
                  }
@@ -128,7 +128,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt3++;
              else
              {
-                 if(cnt3 > MIN_VAL)
+                 if(cnt3 > MIN_AXIS_VAL)
                  {
                      cnt3--;
                  }
@@ -148,7 +148,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt4++;
              else
              {
-                 if(cnt4 > MIN_VAL)
+                 if(cnt4 > MIN_AXIS_VAL)
                  {
                      cnt4--;
                  }
@@ -217,7 +217,6 @@ int main(void)
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_4);
-//  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -225,19 +224,16 @@ int main(void)
 //  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
   while (1)
   {
-//      main_process();
+      main_process();
       /*test 4 encoders in reality*/
-      axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
+//      axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
 
-      axis2.desired_value = (uint32_t)(axis2.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
 
-      axis3.desired_value = (uint32_t)(axis3.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
+//      axis2.desired_value = (uint32_t)(axis2.angle * ANGLE_CONVERT_VAL);
 
-      axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
-      pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
+//      axis3.desired_value = (uint32_t)(axis3.angle * ANGLE_CONVERT_VAL);
+
+//      axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

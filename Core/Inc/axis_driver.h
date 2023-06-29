@@ -9,7 +9,6 @@
 #define INC_AXIS_DRIVER_H_
 #include "main.h"
 
-
 typedef enum
 {
     CW,
@@ -34,6 +33,16 @@ typedef struct
     dir_t dir; /*direction of motor*/
 }M_axis_t;
 
+extern M_axis_t axis1;
+extern M_axis_t axis2;
+extern M_axis_t axis3;
+extern M_axis_t axis4;
+extern volatile uint32_t cnt1;
+extern volatile uint32_t cnt2;
+extern volatile uint32_t cnt3;
+extern volatile uint32_t cnt4;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
 
 #define ANGLE_CONVERT_VAL     (18.0555555555/4) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
@@ -42,6 +51,7 @@ typedef struct
 #define MAX_PWM               (500)
 #define MIN_PWM               (0)
 #define HOME_SPEED            (200U)
+#define MIN_AXIS_VAL          (3U)
 
 ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set);
 ret_val_t auto_home(void);

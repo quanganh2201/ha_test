@@ -77,13 +77,12 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
     uint16_t pwm_val = 0;
     uint32_t chA = 0;
     uint32_t chB = 0;
-//    axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
     /*Choose pin for pwm*/
     axis->channel_pin_set = ch_pin_set;
+    /*Set desired value for the motor*/
+    axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
     /*PWM*/
     axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 1);
-
-//    axis->pwm = 400;
     /*Select channel*/
     if(0 == axis->channel_pin_set)
     {
