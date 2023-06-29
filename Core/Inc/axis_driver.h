@@ -10,7 +10,6 @@
 #include "main.h"
 
 
-
 typedef enum
 {
     CW,
@@ -40,11 +39,12 @@ typedef struct
 #define CALIB_VAL             (0U)
 
 
-#define MAX_PWM 500
-#define MIN_PWM 0
+#define MAX_PWM               (500)
+#define MIN_PWM               (0)
+#define HOME_SPEED            (200U)
 
 ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set);
-ret_val_t auto_home(uint16_t *axis_pin_num);
+ret_val_t auto_home(void);
 
 
 

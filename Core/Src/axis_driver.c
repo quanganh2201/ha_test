@@ -96,40 +96,24 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
         chB = TIM_CHANNEL_4;
     }
 
-//    HAL_TIM_PWM_Start (htim, chA);
-//    HAL_TIM_PWM_Start (htim, chB);
     /*1300 ~ 360 degree*/
     if (axis->desired_value != 0)
     {
-//        if(encoder_val > (axis->desired_value - CALIB_VAL))
-//        {
-//            HAL_GPIO_WritePin(GPIOB,axis_pin_num, RESET);
-//            axis->desired_value = 0;
-//            axis->angle = 0;
-//            __HAL_TIM_SET_COUNTER(htim, 0);
-//            ret_val = SUCCESSFUL;
-//        }
-//        else
-//        {
-//            HAL_GPIO_WritePin(GPIOB,axis_pin_num, SET);
-//        }
         if(encoder_val < axis->desired_value)
         {
             __HAL_TIM_SET_COMPARE(htim, chA, 0);
             __HAL_TIM_SET_COMPARE(htim, chB, axis->pwm);
-//            axis->dir = CW;
         }
         else
         {
             __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
             __HAL_TIM_SET_COMPARE(htim, chB, 0);
-//            axis->dir = CCW;
         }
 
     }
     return ret_val;
 }
-ret_val_t auto_home(uint16_t *axis_pin_num)
+ret_val_t auto_home()
 {
     /*Turn until receive home signal*/
     ret_val_t ret_val = ERR;
@@ -138,33 +122,54 @@ ret_val_t auto_home(uint16_t *axis_pin_num)
     uint8_t axis3_flag = 0;
     uint8_t axis4_flag = 0;
     int i = 0;
-    for(i = 0; i < 4; i++)
+    /*Turn 4 motors till reaching end stop*/
+    for(i = 0; i < HOME_SPEED; i+=20)
     {
-        HAL_GPIO_WritePin(GPIOB, *(axis_pin_num + i), SET);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, i);
+
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 0);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, i);
+
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, i);
+
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 0);
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, i);
     }
+
     while((axis1_flag != 1) || (axis2_flag != 1) || (axis3_flag != 1) || (axis4_flag != 1))
     {
-        if(HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_2) == 1)
+        /*Check each motor if reaching end stop*/
+        if(HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_15) == 1)
         {
-            HAL_GPIO_WritePin(GPIOB, *(axis_pin_num), RESET);
+            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 0);
             axis1_flag = 1;
         }
-        if(HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_3) == 1)
+        if(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_3) == 1)
         {
-            HAL_GPIO_WritePin(GPIOB, *(axis_pin_num + 1), RESET);
+            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, 0);
             axis2_flag = 1;
         }
-        if(HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_4) == 1)
+        if(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_4) == 1)
         {
-            HAL_GPIO_WritePin(GPIOB, *(axis_pin_num + 2), RESET);
+            __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);
             axis3_flag = 1;
 
         }
-        if(HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_5) == 1)
+        if(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_5) == 1)
         {
-            HAL_GPIO_WritePin(GPIOB, *(axis_pin_num + 3), RESET);
+            __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 0);
             axis4_flag = 1;
         }
+    }
+    /*Blynk led to notice*/
+    for(i = 0; i < 10; i++)
+    {
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
+        HAL_Delay(150);
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
+        HAL_Delay(150);
     }
     /*reset count value*/
     ret_val = SUCCESSFUL;
