@@ -56,10 +56,12 @@ volatile uint32_t cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0;
 uint32_t DT = 0;
 uint32_t previousTime;
 uint32_t curTime = 0;;
-M_axis_t axis1 = {0};
-M_axis_t axis2 = {0};
-M_axis_t axis3 = {0};
-M_axis_t axis4 = {0};
+M_axis_t axis1 = {0,90};
+M_axis_t axis2 = {0,90};
+M_axis_t axis3 = {0,90};
+M_axis_t axis4 = {0,90};
+uint8_t TEST;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,7 +92,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         axis1.dir = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
         {
-             if(axis1.dir)
+             if(!axis1.dir)
                  cnt1++;
              else
              {
@@ -107,7 +109,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         axis2.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)
         {
-             if(axis2.dir)
+             if(!axis2.dir)
                  cnt2++;
              else
              {
@@ -124,7 +126,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         axis3.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14);
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3)
         {
-             if(axis3.dir)
+             if(!axis3.dir)
                  cnt3++;
              else
              {
@@ -144,7 +146,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         axis4.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13);
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
         {
-             if(axis4.dir)
+             if(!axis4.dir)
                  cnt4++;
              else
              {
@@ -221,6 +223,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+//  auto_home();
 //  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
   while (1)
   {

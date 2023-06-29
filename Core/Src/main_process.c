@@ -48,8 +48,8 @@ void main_process()
 			sProcess.frameFront[2] = sModule1Params.speed;
 			sProcess.frameFront[3] = (uint16_t) (sProcess.frameFront[0] ^sProcess.frameFront[1]^sProcess.frameFront[2]);
 			sProcess.frameRear[0] = 0xABCD;
-			sProcess.frameRear[1] = sModule3Params.speed;
-			sProcess.frameRear[2] = sModule4Params.speed;
+			sProcess.frameRear[1] = -sModule4Params.speed;
+			sProcess.frameRear[2] = -sModule3Params.speed;
 			sProcess.frameRear[3] = (uint16_t) (sProcess.frameRear[0] ^sProcess.frameRear[1]^sProcess.frameRear[2]);
 			HAL_UART_Transmit(&huart2, (uint8_t *)sProcess.frameFront, sizeof(sProcess.frameFront), 10);
 			HAL_UART_Transmit(&huart6, (uint8_t *)sProcess.frameRear, sizeof(sProcess.frameRear), 10);

@@ -48,9 +48,9 @@ extern TIM_HandleTypeDef htim4;
 #define CALIB_VAL             (0U)
 
 
-#define MAX_PWM               (500)
+#define MAX_PWM               (400)
 #define MIN_PWM               (0)
-#define HOME_SPEED            (200U)
+#define HOME_SPEED            (400U)
 #define MIN_AXIS_VAL          (3U)
 
 ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set);

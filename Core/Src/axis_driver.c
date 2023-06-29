@@ -86,13 +86,13 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
     /*Select channel*/
     if(0 == axis->channel_pin_set)
     {
-        chA = TIM_CHANNEL_1;
-        chB = TIM_CHANNEL_2;
+        chA = TIM_CHANNEL_2;
+        chB = TIM_CHANNEL_1;
     }
     else
     {
-        chA = TIM_CHANNEL_3;
-        chB = TIM_CHANNEL_4;
+        chA = TIM_CHANNEL_4;
+        chB = TIM_CHANNEL_3;
     }
 
     /*1300 ~ 360 degree*/
@@ -102,11 +102,15 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
         {
             __HAL_TIM_SET_COMPARE(htim, chA, 0);
             __HAL_TIM_SET_COMPARE(htim, chB, axis->pwm);
+//            __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+//            __HAL_TIM_SET_COMPARE(htim, chB, 0);
         }
         else
         {
             __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
             __HAL_TIM_SET_COMPARE(htim, chB, 0);
+//            __HAL_TIM_SET_COMPARE(htim, chA, 0);
+//            __HAL_TIM_SET_COMPARE(htim, chB, axis->pwm);
         }
 
     }
