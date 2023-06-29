@@ -41,10 +41,14 @@ void Swerve_CoefitionCal(float Vx,float Vy, float w)
 //	C = COE_C(Vy,w);
 //	D = COE_D(Vy,w);
 
-	A = Vx-w*(BASE_LENGHT/2);
-	B = Vx+w*(BASE_LENGHT/2);
-	C = Vy-w*(BASE_WIDTH/2);
-	D = Vy+w*(BASE_WIDTH/2);
+//	A = Vx-w*(BASE_LENGHT/2);
+//	B = Vx+w*(BASE_LENGHT/2);
+//	C = Vy-w*(BASE_WIDTH/2);
+//	D = Vy+w*(BASE_WIDTH/2);
+	A = Vx-w*(3/2);
+	B = Vx+w*(3/2);
+	C = Vy-w*(3/2);
+	D = Vy+w*(3/2);
 }
 
 float Swerve_Speed(uint8_t wheelN0)
@@ -54,13 +58,37 @@ float Swerve_Speed(uint8_t wheelN0)
 	switch(wheelN0)
 	{
 	case 1:
-		tmp = B*B+C*C;
+		if (sVehicalParams.Vx == 0 && sVehicalParams.Vy != 0 && sVehicalParams.W != 0)
+		{
+			tmp = A*A+D*D;
+
+		}
+		else if (sVehicalParams.Vy == 0 && sVehicalParams.Vx != 0 && sVehicalParams.W != 0)
+		{
+			tmp = A*A+D*D;
+		}
+		else
+		{
+			tmp = (B*B+C*C);
+		}
 		break;
 	case 2:
 		tmp = B*B+D*D;
 		break;
 	case 3:
-		tmp = A*A+D*D;
+		if (sVehicalParams.Vx == 0 && sVehicalParams.Vy != 0 && sVehicalParams.W != 0)
+		{
+
+			tmp = (B*B+C*C);
+		}
+		else if (sVehicalParams.Vy == 0 && sVehicalParams.Vx != 0 && sVehicalParams.W != 0)
+		{
+			tmp = (B*B+C*C);
+		}
+		else
+			{
+			tmp = A*A+D*D;
+			}
 		break;
 	case 4:
 		tmp = A*A+C*C;
@@ -75,13 +103,52 @@ int Swerve_Angle(uint8_t wheelN0)
 	switch(wheelN0)
 	{
 	case 1:
-		tmp = atan2(C,B)*180/PI;
+		if (sVehicalParams.Vx == 0 && sVehicalParams.Vy != 0 && sVehicalParams.W != 0)
+		{
+
+			tmp = atan2(A,D)*180/PI;// OK
+		}
+		else if (sVehicalParams.Vy == 0 && sVehicalParams.Vx != 0 && sVehicalParams.W != 0)
+		{
+			tmp = atan2(A,D)*180/PI;//OK
+		}
+		else if (sVehicalParams.Vx == 0 && sVehicalParams.Vy == 0)
+		{
+			tmp = ((atan2(B,C))*180/PI)-180;//OK
+		}
+		else if (sVehicalParams.Vx != 0 && sVehicalParams.Vy != 0&& sVehicalParams.W != 0)
+		{
+			tmp = atan2(A,D)*180/PI;//OK
+		}
+		else
+		{
+			tmp = atan2(B,C)*180/PI;
+		}
 		break;
 	case 2:
 		tmp = atan2(B,D)*180/PI;
 		break;
 	case 3:
-		tmp = atan2(D,A)*180/PI;
+		if (sVehicalParams.Vx == 0 && sVehicalParams.Vy != 0 && sVehicalParams.W != 0 )
+		{
+			tmp = (atan2(B,C))*180/PI;//OK
+		}
+		else if (sVehicalParams.Vy == 0 && sVehicalParams.Vx != 0 )
+		{
+			tmp = (atan2(B,C))*180/PI;//OK
+		}
+		else if (sVehicalParams.Vx == 0 && sVehicalParams.Vy == 0 && sVehicalParams.W != 0)
+		{
+			tmp = (atan2(A,D)*180/PI)+180;//OK
+		}
+		else if (sVehicalParams.Vx != 0 && sVehicalParams.Vy != 0 && sVehicalParams.W != 0)
+		{
+			tmp = (atan2(B,C))*180/PI;//OK
+		}
+		else
+		{
+			tmp = atan2(A,D)*180/PI;
+		}
 		break;
 	case 4:
 		tmp = atan2(A,C)*180/PI;
