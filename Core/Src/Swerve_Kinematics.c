@@ -41,14 +41,18 @@ void Swerve_CoefitionCal(float Vx,float Vy, float w)
 //	C = COE_C(Vy,w);
 //	D = COE_D(Vy,w);
 
-//	A = Vx-w*(BASE_LENGHT/2);
-//	B = Vx+w*(BASE_LENGHT/2);
-//	C = Vy-w*(BASE_WIDTH/2);
-//	D = Vy+w*(BASE_WIDTH/2);
-	A = Vx-w*(3/2);
-	B = Vx+w*(3/2);
-	C = Vy-w*(3/2);
-	D = Vy+w*(3/2);
+
+	float r;
+	r = sqrt((BASE_LENGHT*BASE_LENGHT)+(BASE_WIDTH*BASE_WIDTH))/2;
+	A = Vx-w*(BASE_LENGHT/r);
+	B = Vx+w*(BASE_LENGHT/r);
+	C = Vy-w*(BASE_WIDTH/r);
+	D = Vy+w*(BASE_WIDTH/r);
+
+//		A = Vx-w*(BASE_LENGHT/2);
+//		B = Vx+w*(BASE_LENGHT/2);
+//		C = Vy-w*(BASE_WIDTH/2);
+//		D = Vy+w*(BASE_WIDTH/2);
 }
 
 float Swerve_Speed(uint8_t wheelN0)
@@ -178,8 +182,19 @@ void KinematicsHandler()
 	sModule2Params.speed = (int)(Swerve_Speed(2)* M2RAD)&0xFFFF;
 	sModule3Params.speed = (int)(Swerve_Speed(3)* M2RAD)&0xFFFF;
 	sModule4Params.speed = (int)(Swerve_Speed(4)* M2RAD)&0xFFFF;
-}
 
+
+	// Limit
+	sModule1Params.speed = (sModule1Params.speed > 1000) ? 1000 : sModule1Params.speed;
+	sModule2Params.speed = (sModule2Params.speed > 1000) ? 1000 : sModule2Params.speed;
+	sModule3Params.speed = (sModule3Params.speed > 1000) ? 1000 : sModule3Params.speed;
+	sModule4Params.speed = (sModule4Params.speed > 1000) ? 1000 : sModule4Params.speed;
+
+	sModule1Params.speed = (sModule1Params.speed < -1000) ? -1000 : sModule1Params.speed;
+	sModule2Params.speed = (sModule2Params.speed < -1000) ? -1000 : sModule2Params.speed;
+	sModule3Params.speed = (sModule3Params.speed < -1000) ? -1000 : sModule3Params.speed;
+	sModule4Params.speed = (sModule4Params.speed < -1000) ? -1000 : sModule4Params.speed;
+}
 
 
 
