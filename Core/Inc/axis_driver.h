@@ -44,7 +44,7 @@ extern volatile uint32_t cnt4;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 
-#define ANGLE_CONVERT_VAL     (18.0555555555/4) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
+#define ANGLE_CONVERT_VAL     (4.16666667) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
 
 
