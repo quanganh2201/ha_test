@@ -12,7 +12,7 @@
 
 #define PI (float)3.14159265359
 #define WHEEL_RADI (float) 0.1651
-#define BASE_LENGHT (float) 0.58 //in metter
+#define BASE_LENGHT (float) 0.58 //in meter
 #define BASE_WIDTH (float) 0.48
 #define M2RAD (float)(60/(2*PI*WHEEL_RADI))
 
