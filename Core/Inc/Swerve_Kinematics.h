@@ -16,24 +16,24 @@
 #define BASE_WIDTH (float) 0.48
 #define M2RAD (float)(60/(2*PI*WHEEL_RADI))
 
-#define COE_A(Vx,w)		Vx-w*(BASE_LENGHT/2)
-#define COE_B(Vx,w)		Vx+w*(BASE_LENGHT/2)
-#define COE_C(Vy,w)		Vy-w*(BASE_WIDTH/2)
-#define COE_D(Vy,w)		Vy+w*(BASE_WIDTH/2)
+#define COE_A(Vx,w)     Vx-w*(BASE_LENGHT/2)
+#define COE_B(Vx,w)     Vx+w*(BASE_LENGHT/2)
+#define COE_C(Vy,w)     Vy-w*(BASE_WIDTH/2)
+#define COE_D(Vy,w)     Vy+w*(BASE_WIDTH/2)
 
 
 
 typedef struct
 {
-	float Vx,Vy,W;
+    float Vx,Vy,W;
 } S_VEHICAL_PARAMS;
 
 typedef struct
 {
-	uint8_t currentAngle;
-	int targetAngle;
-	int16_t speed;
-	int reverseVel;
+    uint8_t currentAngle;
+    int targetAngle;
+    int16_t speed;
+    int reverseVel;
 } S_MODULE_PARAMS;
 
 extern S_VEHICAL_PARAMS sVehicalParams;

@@ -24,6 +24,7 @@
 #include"DATN_Comm.h"
 #include "Swerve_Kinematics.h"
 #include "axis_driver.h"
+#include "main_process.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -217,10 +218,10 @@ int main(void)
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_4);
   /* USER CODE END 2 */
-
+  Init();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  auto_home();
+//  auto_home();
 //  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
   while (1)
   {

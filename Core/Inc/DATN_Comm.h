@@ -55,7 +55,7 @@ typedef struct
 	uint8_t Rx;
 	E_RECEIVE_STATE action;
 	bool dataValid;
-	uint8_t params[16];
+	uint8_t params[18];
 } S_UART_RECEIVE;
 
 typedef struct
