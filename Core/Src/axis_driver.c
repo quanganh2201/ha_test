@@ -11,7 +11,8 @@ const float Kp= 1;
 const float  Ki = 0;
 const float  Kd = 20;
 
-int PID(float ref, float pitch, uint8_t pid_flag){
+uint16_t PID(float ref, float pitch, uint8_t pid_flag,uint8_t channel)
+{
     float P = 0, I = 0, D = 0 , pid_pwm = 0;
     float lastError = 0;
     float error = 0;
@@ -40,12 +41,38 @@ int PID(float ref, float pitch, uint8_t pid_flag){
         I+=Ki* i_err;
     else
         I+=0.5*i_err; // If the robot has to move the Ki term should be lower so there are less oscillation
-
-    if (I > MAX_PWM)
-        I = MAX_PWM;
+switch(channel)
+{
+case 1:
+    if (I > MAX_PWM1)
+        I = MAX_PWM1;
     else if (I<MIN_PWM){
         I=MIN_PWM;
     }
+    break;
+case 2:
+    if (I > MAX_PWM2)
+        I = MAX_PWM2;
+    else if (I<MIN_PWM){
+        I=MIN_PWM;
+    }
+    break;
+case 3:
+    if (I > MAX_PWM3)
+        I = MAX_PWM3;
+    else if (I<MIN_PWM){
+        I=MIN_PWM;
+    }
+    break;
+case 4:
+    if (I > MAX_PWM4)
+        I = MAX_PWM4;
+    else if (I<MIN_PWM){
+        I=MIN_PWM;
+    }
+    break;
+}
+
 
     ////calculate Derivative term
     D = Kd * (error - lastError); //dt;
@@ -60,18 +87,43 @@ int PID(float ref, float pitch, uint8_t pid_flag){
 
     //max sure pwm is bound between allowed min/max thresholds
 
-    int out_pwm = (int) (pid_pwm);
-    if (pid_pwm > MAX_PWM)
-        out_pwm = MAX_PWM;
-    else if (pid_pwm < MIN_PWM)
-        out_pwm = MIN_PWM;
+    uint16_t out_pwm = (int) (pid_pwm);
 
+
+
+    switch(channel)
+    {
+    case 1:
+        if (pid_pwm > MAX_PWM1)
+                out_pwm = MAX_PWM1;
+            else if (pid_pwm < MIN_PWM)
+                out_pwm = MIN_PWM;
+        break;
+    case 2:
+        if (pid_pwm > MAX_PWM2)
+                out_pwm = MAX_PWM2;
+            else if (pid_pwm < MIN_PWM)
+                out_pwm = MIN_PWM;
+        break;
+    case 3:
+        if (pid_pwm > MAX_PWM3)
+                out_pwm = MAX_PWM3;
+            else if (pid_pwm < MIN_PWM)
+                out_pwm = MIN_PWM;
+        break;
+    case 4:
+        if (pid_pwm > MAX_PWM4)
+                out_pwm = MAX_PWM4;
+            else if (pid_pwm < MIN_PWM)
+                out_pwm = MIN_PWM;
+        break;
+    }
     lastError = error;
 
     return out_pwm;
 
 }
-ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set)
+ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set,uint8_t channel)
 {
     uint8_t ret_val = ERR;
     uint16_t pwm_val = 0;
@@ -82,7 +134,7 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
     /*Set desired value for the motor*/
     axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
     /*PWM*/
-    axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 1);
+    axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 1, channel);
     /*Select channel*/
     if(0 == axis->channel_pin_set)
     {

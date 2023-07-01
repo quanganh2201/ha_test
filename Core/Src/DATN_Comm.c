@@ -86,39 +86,42 @@ void convert_float2hex(float *fVal, uint8_t* targetHexVal)
  * @note:   Tra ve gia tri float cho sResultData.Vx,sResultData.Vy,sResultData.W
  */
 S_RESULT_DATA sResultData;
+uint32_t pre;
 //extern S_VEHICAL_PARAMS sVehicalParams;
 void UART2_Handler()
 {
-//    if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x00)//s_UART_handler.params[1]= 0x00: che do bthg
-//    {
-//        memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
-//        memcpy(&sResultData.rawDatay[0],&s_UART_handler.params[VyOFFSET],4);
-//        memcpy(&sResultData.rawDataw[0],&s_UART_handler.params[WOFFSET],4);
-//
-//        convert_hex2float(&sVehicalParams.Vx, &sResultData.rawDatax[0]);
-//        convert_hex2float(&sVehicalParams.Vy, &sResultData.rawDatay[0]);
-//        convert_hex2float(&sVehicalParams.W, &sResultData.rawDataw[0]);
-//        s_UART_handler.dataValid = 0;
-//        KinematicsHandler();
-//        memset(&s_UART_handler.params[0],'\0',16);
-//    }
-//    else if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x01)//s_UART_handler.params[1]= 0x00: che do chi quay goc
-//    {
-//        memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
-//        memcpy(&sResultData.rawDatay[0],&s_UART_handler.params[VyOFFSET],4);
-//        memcpy(&sResultData.rawDataw[0],&s_UART_handler.params[WOFFSET],4);
-//
-//        convert_hex2float(&sVehicalParams.Vx, &sResultData.rawDatax[0]);
-//        convert_hex2float(&sVehicalParams.Vy, &sResultData.rawDatay[0]);
-//        convert_hex2float(&sVehicalParams.W, &sResultData.rawDataw[0]);
-//        s_UART_handler.dataValid = 0;
-//        KinematicsHandler();
-//        sModule1Params.speed = 0;
-//        sModule2Params.speed = 0;
-//        sModule3Params.speed = 0;
-//        sModule4Params.speed = 0;
-//        memset(&s_UART_handler.params[0],'\0',16);
-//    }
+    if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x00)//s_UART_handler.params[1]= 0x00: che do bthg
+    {
+        memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
+        memcpy(&sResultData.rawDatay[0],&s_UART_handler.params[VyOFFSET],4);
+        memcpy(&sResultData.rawDataw[0],&s_UART_handler.params[WOFFSET],4);
+
+        convert_hex2float(&sVehicalParams.Vx, &sResultData.rawDatax[0]);
+        convert_hex2float(&sVehicalParams.Vy, &sResultData.rawDatay[0]);
+        convert_hex2float(&sVehicalParams.W, &sResultData.rawDataw[0]);
+        s_UART_handler.dataValid = 0;
+        KinematicsHandler();
+        pre = HAL_GetTick();
+        memset(&s_UART_handler.params[0],'\0',16);
+    }
+    else if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x01)//s_UART_handler.params[1]= 0x00: che do chi quay goc
+    {
+        memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
+        memcpy(&sResultData.rawDatay[0],&s_UART_handler.params[VyOFFSET],4);
+        memcpy(&sResultData.rawDataw[0],&s_UART_handler.params[WOFFSET],4);
+
+        convert_hex2float(&sVehicalParams.Vx, &sResultData.rawDatax[0]);
+        convert_hex2float(&sVehicalParams.Vy, &sResultData.rawDatay[0]);
+        convert_hex2float(&sVehicalParams.W, &sResultData.rawDataw[0]);
+        s_UART_handler.dataValid = 0;
+        KinematicsHandler();
+        sModule1Params.speed = 0;
+        sModule2Params.speed = 0;
+        sModule3Params.speed = 0;
+        sModule4Params.speed = 0;
+        pre = HAL_GetTick();
+        memset(&s_UART_handler.params[0],'\0',16);
+    }
 }
 
 
