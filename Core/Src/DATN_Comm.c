@@ -10,10 +10,9 @@ S_SPI_RECEIVE s_SPI_handler;
 S_UART_RECEIVE s_UART_handler;
 extern UART_HandleTypeDef huart2;
 
-void Init()
+void Init_UART_Recv()
 {
   HAL_UART_Receive_IT(&huart2, &s_UART_handler.Rx, 1);
-//  HAL_SPI_Receive_IT(&SLAVE_SPI, &s_SPI_handler.Rx, 1);
 }
 
 

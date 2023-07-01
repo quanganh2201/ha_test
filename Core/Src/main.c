@@ -83,8 +83,6 @@ static void MX_TIM2_Init(void);
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
     /*Axis 1: channel 1, pin A8*/
-
-
     if (htim->Instance == htim2.Instance)
     {
         /*Axis 1: channel 1, pin A8*/
@@ -205,8 +203,6 @@ int main(void)
   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
   HAL_TIM_IC_Start_IT(&htim5, TIM_CHANNEL_1);
-//  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
-//  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
   /*Start pwm*/
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_2);
@@ -217,7 +213,7 @@ int main(void)
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_4);
-  Init();
+  Init_UART_Recv();
   /* USER CODE END 2 */
 
   /* Infinite loop */

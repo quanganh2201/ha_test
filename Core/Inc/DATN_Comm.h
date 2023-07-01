@@ -67,5 +67,6 @@ extern S_RESULT_DATA sResultData;
 
 
 void UART2_Handler();
-void Init();
+void Init_UART_Recv();
+
 #endif /* INC_DATN_COMM_H_ */

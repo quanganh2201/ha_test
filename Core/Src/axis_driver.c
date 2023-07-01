@@ -11,7 +11,7 @@ const float Kp= 1;
 const float  Ki = 0;
 const float  Kd = 20;
 
-uint16_t PID(float ref, float pitch, uint8_t pid_flag,uint8_t channel)
+uint16_t PID(float ref, float pitch, uint8_t pid_flag)
 {
     float P = 0, I = 0, D = 0 , pid_pwm = 0;
     float lastError = 0;
@@ -66,7 +66,7 @@ uint16_t PID(float ref, float pitch, uint8_t pid_flag,uint8_t channel)
     return out_pwm;
 
 }
-ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set,uint8_t channel)
+ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set)
 {
     uint8_t ret_val = ERR;
     uint32_t chA = 0;
@@ -76,7 +76,7 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
     /*Set desired value for the motor*/
     axis->desired_value = (uint32_t)(axis->angle * ANGLE_CONVERT_VAL);
     /*PWM*/
-    axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 1, channel);
+    axis->pwm = (uint16_t)PID(axis->desired_value, encoder_val, 1);
     /*Select channel*/
     if(0 == axis->channel_pin_set)
     {

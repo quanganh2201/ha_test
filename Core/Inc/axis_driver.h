@@ -46,15 +46,12 @@ extern TIM_HandleTypeDef htim4;
 
 #define ANGLE_CONVERT_VAL     (4.16666667) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
-
-
-
-#define MAX_PWM                (400)
+#define MAX_PWM               (400U)
 #define MIN_PWM               (0)
 #define HOME_SPEED            (400U)
 #define MIN_AXIS_VAL          (3U)
 
-ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set,uint8_t channel);
+ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set);
 ret_val_t auto_home(void);
 
 
