@@ -93,14 +93,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt1++;
              else
              {
-                 if(cnt1 > MIN_AXIS_VAL)
-                 {
-                     cnt1--;
-                 }
-                 else
-                 {
-                     cnt1 = 0;
-                 }
+                 /*Avoiding floating value*/
+                 cnt1 = (cnt1 > MIN_AXIS_VAL) ? (cnt1 - 1) : 0;
              }
         }
         axis2.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
@@ -110,14 +104,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt2++;
              else
              {
-                 if(cnt2 > MIN_AXIS_VAL)
-                 {
-                     cnt2--;
-                 }
-                 else
-                 {
-                     cnt2 = 0;
-                 }
+                 cnt2 = (cnt2 > MIN_AXIS_VAL) ? (cnt2 - 1) : 0;
              }
         }
         axis3.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14);
@@ -127,14 +114,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt3++;
              else
              {
-                 if(cnt3 > MIN_AXIS_VAL)
-                 {
-                     cnt3--;
-                 }
-                 else
-                 {
-                     cnt3 = 0;
-                 }
+                 cnt3 = (cnt3 > MIN_AXIS_VAL) ? (cnt3 - 1) : 0;
              }
         }
     }
@@ -147,14 +127,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt4++;
              else
              {
-                 if(cnt4 > MIN_AXIS_VAL)
-                 {
-                     cnt4--;
-                 }
-                 else
-                 {
-                     cnt4 = 0;
-                 }
+                 cnt4 = (cnt4 > MIN_AXIS_VAL) ? (cnt4 - 1) : 0;
              }
         }
     }
@@ -223,15 +196,6 @@ int main(void)
   while (1)
   {
       main_process();
-      /*test 4 encoders in reality*/
-//      axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
-
-
-//      axis2.desired_value = (uint32_t)(axis2.angle * ANGLE_CONVERT_VAL);
-
-//      axis3.desired_value = (uint32_t)(axis3.angle * ANGLE_CONVERT_VAL);
-
-//      axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
