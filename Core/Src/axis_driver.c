@@ -90,8 +90,8 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
     }
 
     /*1500 ~ 360 degree => coefficient = 1500/360*/
-    if (axis->desired_value != 0)
-    {
+//    if (axis->desired_value != 0)
+//    {
         if(encoder_val < axis->desired_value)
         {
             __HAL_TIM_SET_COMPARE(htim, chA, 0);
@@ -103,7 +103,7 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
             __HAL_TIM_SET_COMPARE(htim, chB, 0);
         }
 
-    }
+//    }
     return ret_val;
 }
 ret_val_t auto_home()
