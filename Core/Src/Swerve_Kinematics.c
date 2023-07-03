@@ -120,6 +120,10 @@ int Swerve_Angle(uint8_t wheelN0)
         {
             tmp = ((atan2(B,C))*180/PI)-180;//OK
         }
+        else if (sVehicalParams.Vx == 0 && sVehicalParams.Vy == 0 && sVehicalParams.W <=0)
+        {
+            tmp = (atan2(B,C)*180/PI)+180;//OK
+        }
         else if (sVehicalParams.Vx != 0 && sVehicalParams.Vy != 0&& sVehicalParams.W != 0)
         {
             tmp = atan2(A,D)*180/PI;//OK
@@ -144,6 +148,10 @@ int Swerve_Angle(uint8_t wheelN0)
         else if (sVehicalParams.Vx == 0 && sVehicalParams.Vy == 0 && sVehicalParams.W >=0)
         {
             tmp = (atan2(A,D)*180/PI)+180;//OK
+        }
+        else if (sVehicalParams.Vx == 0 && sVehicalParams.Vy == 0 && sVehicalParams.W <=0)
+        {
+            tmp = (atan2(A,D)*180/PI)-180;//OK
         }
         else if (sVehicalParams.Vx != 0 && sVehicalParams.Vy != 0 && sVehicalParams.W != 0)
         {
@@ -195,7 +203,6 @@ void KinematicsHandler()
     sModule3Params.speed = (sModule3Params.speed < -1000) ? -1000 : sModule3Params.speed;
     sModule4Params.speed = (sModule4Params.speed < -1000) ? -1000 : sModule4Params.speed;
 }
-
 
 
 
