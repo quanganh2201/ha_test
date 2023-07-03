@@ -11,16 +11,14 @@ const float Kp= 1;
 const float  Ki = 0;
 const float  Kd = 20;
 
-int PID(float ref, float pitch, uint8_t pid_flag){
+uint16_t PID(float ref, float pitch, uint8_t pid_flag)
+{
     float P = 0, I = 0, D = 0 , pid_pwm = 0;
     float lastError = 0;
     float error = 0;
+    static float i_err = 0;
+    uint16_t out_pwm = 0;
     //calculate error
-//    float a;
-//    a = (float)(HAL_GetTick()/( 1.0e6 ));
-//    curTime = HAL_GetTick();
-//    dt = curTime - previousTime;
-//    dt= 0.005;
     if(ref > pitch)
     {
         error = (ref - pitch);
@@ -34,7 +32,6 @@ int PID(float ref, float pitch, uint8_t pid_flag){
     P = Kp * error;
 
 ////    calculate Integral term. Account for wind-up
-    static float i_err;
     i_err+= error;
     if(pid_flag==1)
         I+=Ki* i_err;
@@ -54,13 +51,11 @@ int PID(float ref, float pitch, uint8_t pid_flag){
     if(pid_flag == 0){
         D = 0;
     }
-
     //total PID value
     pid_pwm = P + I + D;
-
     //max sure pwm is bound between allowed min/max thresholds
+    out_pwm = (int)(pid_pwm);
 
-    int out_pwm = (int) (pid_pwm);
     if (pid_pwm > MAX_PWM)
         out_pwm = MAX_PWM;
     else if (pid_pwm < MIN_PWM)
@@ -74,7 +69,6 @@ int PID(float ref, float pitch, uint8_t pid_flag){
 ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_val, pwm_pin_set_t ch_pin_set)
 {
     uint8_t ret_val = ERR;
-    uint16_t pwm_val = 0;
     uint32_t chA = 0;
     uint32_t chB = 0;
     /*Choose pin for pwm*/
@@ -95,22 +89,18 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
         chB = TIM_CHANNEL_3;
     }
 
-    /*1300 ~ 360 degree*/
+    /*1500 ~ 360 degree => coefficient = 1500/360*/
     if (axis->desired_value != 0)
     {
         if(encoder_val < axis->desired_value)
         {
             __HAL_TIM_SET_COMPARE(htim, chA, 0);
             __HAL_TIM_SET_COMPARE(htim, chB, axis->pwm);
-//            __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
-//            __HAL_TIM_SET_COMPARE(htim, chB, 0);
         }
         else
         {
             __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
             __HAL_TIM_SET_COMPARE(htim, chB, 0);
-//            __HAL_TIM_SET_COMPARE(htim, chA, 0);
-//            __HAL_TIM_SET_COMPARE(htim, chB, axis->pwm);
         }
 
     }

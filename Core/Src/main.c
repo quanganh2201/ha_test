@@ -24,6 +24,7 @@
 #include"DATN_Comm.h"
 #include "Swerve_Kinematics.h"
 #include "axis_driver.h"
+#include "main_process.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,7 +48,6 @@ TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
 
-UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart6;
 
@@ -72,7 +72,6 @@ static void MX_USART6_UART_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM5_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -84,8 +83,6 @@ static void MX_TIM2_Init(void);
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
     /*Axis 1: channel 1, pin A8*/
-
-
     if (htim->Instance == htim2.Instance)
     {
         /*Axis 1: channel 1, pin A8*/
@@ -96,14 +93,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt1++;
              else
              {
-                 if(cnt1 > MIN_AXIS_VAL)
-                 {
-                     cnt1--;
-                 }
-                 else
-                 {
-                     cnt1 = 0;
-                 }
+                 /*Avoiding floating value*/
+                 cnt1 = (cnt1 > MIN_AXIS_VAL) ? (cnt1 - 1) : 0;
              }
         }
         axis2.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
@@ -113,14 +104,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt2++;
              else
              {
-                 if(cnt2 > MIN_AXIS_VAL)
-                 {
-                     cnt2--;
-                 }
-                 else
-                 {
-                     cnt2 = 0;
-                 }
+                 cnt2 = (cnt2 > MIN_AXIS_VAL) ? (cnt2 - 1) : 0;
              }
         }
         axis3.dir = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14);
@@ -130,14 +114,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt3++;
              else
              {
-                 if(cnt3 > MIN_AXIS_VAL)
-                 {
-                     cnt3--;
-                 }
-                 else
-                 {
-                     cnt3 = 0;
-                 }
+                 cnt3 = (cnt3 > MIN_AXIS_VAL) ? (cnt3 - 1) : 0;
              }
         }
     }
@@ -150,14 +127,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                  cnt4++;
              else
              {
-                 if(cnt4 > MIN_AXIS_VAL)
-                 {
-                     cnt4--;
-                 }
-                 else
-                 {
-                     cnt4 = 0;
-                 }
+                 cnt4 = (cnt4 > MIN_AXIS_VAL) ? (cnt4 - 1) : 0;
              }
         }
     }
@@ -197,7 +167,6 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
-  MX_USART1_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   /*TIM2: encoder*/
@@ -207,8 +176,6 @@ int main(void)
   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
   HAL_TIM_IC_Start_IT(&htim5, TIM_CHANNEL_1);
-//  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
-//  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
   /*Start pwm*/
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_2);
@@ -219,24 +186,16 @@ int main(void)
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start (&htim4, TIM_CHANNEL_4);
+  Init_UART_Recv();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  auto_home();
+//  auto_home();
 //  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
   while (1)
   {
       main_process();
-      /*test 4 encoders in reality*/
-//      axis1.desired_value = (uint32_t)(axis1.angle * ANGLE_CONVERT_VAL);
-
-
-//      axis2.desired_value = (uint32_t)(axis2.angle * ANGLE_CONVERT_VAL);
-
-//      axis3.desired_value = (uint32_t)(axis3.angle * ANGLE_CONVERT_VAL);
-
-//      axis4.desired_value = (uint32_t)(axis4.angle * ANGLE_CONVERT_VAL);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -352,6 +311,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 0 */
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
@@ -364,6 +324,15 @@ static void MX_TIM3_Init(void)
   htim3.Init.Period = 999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
@@ -413,6 +382,7 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 0 */
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
@@ -425,6 +395,15 @@ static void MX_TIM4_Init(void)
   htim4.Init.Period = 999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
   {
     Error_Handler();
@@ -507,39 +486,6 @@ static void MX_TIM5_Init(void)
   /* USER CODE BEGIN TIM5_Init 2 */
 
   /* USER CODE END TIM5_Init 2 */
-
-}
-
-/**
-  * @brief USART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART1_Init 2 */
-
-  /* USER CODE END USART1_Init 2 */
 
 }
 

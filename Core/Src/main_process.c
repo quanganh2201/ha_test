@@ -32,6 +32,7 @@ static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
 	}
 	return flagFinishTask;
 }
+extern uint32_t pre;
 void main_process()
 {
 	switch(sProcess.process)
@@ -64,22 +65,27 @@ void main_process()
 //		}
 
 	    axis1.angle = sModule1Params.targetAngle;
-        pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
+
         axis2.angle = sModule2Params.targetAngle;
-        pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
+
         axis3.angle = sModule3Params.targetAngle;
-        pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
+
         axis4.angle = sModule4Params.targetAngle;
-        pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
-//		else if (!RotateOK)
-//		{
-////			if ( && SendBLDCTimeout(10000, SET1))
-////			sModule1Params.speed = 0;
-////			sModule2Params.speed = 0;
-////			sModule3Params.speed = 0;
-////			sModule4Params.speed = 0;
-////			SendBLDCTimeout(10000, RESET1);
-//		}
+        if ( HAL_GetTick() - pre <= 10000)
+        {
+            pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
+            pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
+            pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
+            pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
+        }
+        else
+        {
+            axis1.pwm = 0;
+            axis2.pwm = 0;
+            axis3.pwm = 0;
+            axis4.pwm = 0;
+        }
+
 		sProcess.process = UARThandler;
 		break;
 	default:

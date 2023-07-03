@@ -30,7 +30,7 @@ typedef struct
     uint16_t angle;
     uint32_t desired_value;
     pwm_pin_set_t channel_pin_set; /*0: ch1 ch2, 1: ch3 ch4*/
-    dir_t dir; /*direction of motor*/
+    volatile dir_t dir; /*direction of motor*/
 }M_axis_t;
 
 extern M_axis_t axis1;
@@ -46,9 +46,7 @@ extern TIM_HandleTypeDef htim4;
 
 #define ANGLE_CONVERT_VAL     (4.16666667) /*   3.61111111111 = 1 round => 1:5 ratio ~ 18.0555555555*/
 #define CALIB_VAL             (0U)
-
-
-#define MAX_PWM               (400)
+#define MAX_PWM               (400U)
 #define MIN_PWM               (0)
 #define HOME_SPEED            (400U)
 #define MIN_AXIS_VAL          (3U)
