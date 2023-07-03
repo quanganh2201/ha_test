@@ -18,6 +18,7 @@ S_MODULE_PARAMS sModule4Params;
 int Swerve_reverseSpeedFlag[4] ;
 int Swerve_angleOptimization(float inputAngle,uint8_t wheelN0)
 {
+
     int suitableAngle;
     if((inputAngle >= -180) && (inputAngle<0))
     {
@@ -36,6 +37,7 @@ int Swerve_angleOptimization(float inputAngle,uint8_t wheelN0)
 
 void Swerve_CoefitionCal(float Vx,float Vy, float w)
 {
+
 //  A = COE_A(Vx,w);
 //  B = COE_B(Vx,w);
 //  C = COE_C(Vy,w);
@@ -57,6 +59,7 @@ void Swerve_CoefitionCal(float Vx,float Vy, float w)
 
 float Swerve_Speed(uint8_t wheelN0)
 {
+
 //  uint8_t tmp_Swerve_reverseSpeedFlag;
     float tmp;
     switch(wheelN0)
@@ -194,8 +197,8 @@ void KinematicsHandler()
     sModule2Params.speed = (sModule2Params.speed < -1000) ? -1000 : sModule2Params.speed;
     sModule3Params.speed = (sModule3Params.speed < -1000) ? -1000 : sModule3Params.speed;
     sModule4Params.speed = (sModule4Params.speed < -1000) ? -1000 : sModule4Params.speed;
-}
 
+}
 
 
 
