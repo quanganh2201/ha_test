@@ -52,7 +52,7 @@ UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart6;
 
 /* USER CODE BEGIN PV */
-volatile uint32_t cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0;
+volatile uint32_t cnt1 = HOME_OFFSET, cnt2 = HOME_OFFSET, cnt3 = HOME_OFFSET, cnt4 = HOME_OFFSET;
 uint32_t DT = 0;
 uint32_t previousTime;
 uint32_t curTime = 0;;
