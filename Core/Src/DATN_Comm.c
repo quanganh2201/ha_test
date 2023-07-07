@@ -86,10 +86,12 @@ void convert_float2hex(float *fVal, uint8_t* targetHexVal)
  */
 S_RESULT_DATA sResultData;
 uint32_t pre;
+uint8_t test;
 //extern S_VEHICAL_PARAMS sVehicalParams;
 void UART2_Handler()
 {
-    if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x00)//s_UART_handler.params[1]= 0x00: che do bthg
+//    if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x00)//s_UART_handler.params[1]= 0x00: che do bthg
+    if(test)
     {
         memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
         memcpy(&sResultData.rawDatay[0],&s_UART_handler.params[VyOFFSET],4);
@@ -102,6 +104,7 @@ void UART2_Handler()
         KinematicsHandler();
         pre = HAL_GetTick();
         memset(&s_UART_handler.params[0],'\0',16);
+        test = 0;
     }
     else if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x01)//s_UART_handler.params[1]= 0x00: che do chi quay goc
     {

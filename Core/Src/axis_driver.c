@@ -88,6 +88,41 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
         chA = TIM_CHANNEL_4;
         chB = TIM_CHANNEL_3;
     }
+    if(axis->desired_value == HOME_OFFSET)
+    {
+        if(axis == &axis1)
+        {
+            while(HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_15) != 1)
+            {
+                __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+                __HAL_TIM_SET_COMPARE(htim, chB, 0);
+            }
+        }
+//        if(axis == &axis2)
+//        {
+//            while(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_3) != 1)
+//            {
+//                __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+//                __HAL_TIM_SET_COMPARE(htim, chB, 0);
+//            }
+//        }
+        if(axis == &axis3)
+        {
+            while(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_4) != 1)
+            {
+                __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+                __HAL_TIM_SET_COMPARE(htim, chB, 0);
+            }
+        }
+        if(axis == &axis4)
+        {
+            while(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_5) != 1)
+            {
+                __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+                __HAL_TIM_SET_COMPARE(htim, chB, 0);
+            }
+        }
+    }
 
     /*1500 ~ 360 degree => coefficient = 1500/360*/
 //    if (axis->desired_value != 0)
