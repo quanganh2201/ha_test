@@ -63,18 +63,22 @@ void main_process()
 //		{
 //
 //		}
-
+	    if(0 == sModule1Params.targetAngle)
+	        sModule1Params.targetAngle = 1;
 	    axis1.angle = sModule1Params.targetAngle;
-
+        if(0 == sModule2Params.targetAngle)
+            sModule2Params.targetAngle = 1;
         axis2.angle = sModule2Params.targetAngle;
-
+        if(0 == sModule3Params.targetAngle)
+            sModule3Params.targetAngle = 1;
         axis3.angle = sModule3Params.targetAngle;
-
+        if(0 == sModule4Params.targetAngle)
+            sModule4Params.targetAngle = 1;
         axis4.angle = sModule4Params.targetAngle;
                     pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
-                    pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
-                    pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
-                    pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
+//                    pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
+//                    pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
+//                    pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
 //        if ( HAL_GetTick() - pre <= 10000)
 //        {
 //            pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);

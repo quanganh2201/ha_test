@@ -8,8 +8,8 @@
 #include "axis_driver.h"
 
 const float Kp= 1;
-const float  Ki = 0;
-const float  Kd = 20;
+const float  Ki = 0.0000011;
+const float  Kd = 10;
 
 uint16_t PID(float ref, float pitch, uint8_t pid_flag)
 {
@@ -34,9 +34,9 @@ uint16_t PID(float ref, float pitch, uint8_t pid_flag)
 ////    calculate Integral term. Account for wind-up
     i_err+= error;
     if(pid_flag==1)
-        I+=Ki* i_err;
+        I =Ki* i_err;
     else
-        I+=0.5*i_err; // If the robot has to move the Ki term should be lower so there are less oscillation
+        I =0.5*i_err; // If the robot has to move the Ki term should be lower so there are less oscillation
 
     if (I > MAX_PWM)
         I = MAX_PWM;
@@ -92,16 +92,24 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
     /*1500 ~ 360 degree => coefficient = 1500/360*/
 //    if (axis->desired_value != 0)
 //    {
-        if(encoder_val < axis->desired_value)
+        if(encoder_val < axis->desired_value )
         {
             __HAL_TIM_SET_COMPARE(htim, chA, 0);
             __HAL_TIM_SET_COMPARE(htim, chB, axis->pwm);
+        }
+        else if(((axis->desired_value -  CALIB_VAL) < encoder_val) \
+                && (encoder_val < (axis->desired_value + CALIB_VAL)))
+        {
+            __HAL_TIM_SET_COMPARE(htim, chA, 0);
+            __HAL_TIM_SET_COMPARE(htim, chB, 0);
+
         }
         else
         {
             __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
             __HAL_TIM_SET_COMPARE(htim, chB, 0);
         }
+            /*Do nothing*/
 
 //    }
     return ret_val;
