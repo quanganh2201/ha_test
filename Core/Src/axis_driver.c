@@ -17,26 +17,26 @@ uint8_t axis4_chk = 0;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if(GPIO_Pin == GPIO_PIN_3) // INT Source is pin A9
-    {
-        axis2_chk = 1;
-//    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11); // Toggle LED
-    }
-    if(GPIO_Pin == GPIO_PIN_4) // INT Source is pin A9
-    {
-//    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11); // Toggle LED
-        axis3_chk = 1;
-    }
-    if(GPIO_Pin == GPIO_PIN_5) // INT Source is pin A9
-    {
-        axis4_chk = 1;
-//    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11); // Toggle LED
-    }
-    if(GPIO_Pin == GPIO_PIN_15) // INT Source is pin A9
-    {
-        axis1_chk = 1;
-//    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11); // Toggle LED
-    }
+//    if(GPIO_Pin == GPIO_PIN_3) // INT Source is pin A9
+//    {
+//        axis2_chk = 1;
+//
+//    }
+//    if(GPIO_Pin == GPIO_PIN_4) // INT Source is pin A9
+//    {
+//
+//        axis3_chk = 1;
+//    }
+//    if(GPIO_Pin == GPIO_PIN_5) // INT Source is pin A9
+//    {
+//        axis4_chk = 1;
+//
+//    }
+//    if(GPIO_Pin == GPIO_PIN_15) // INT Source is pin A9
+//    {
+//        axis1_chk = 1;
+//
+//    }
 }
 uint16_t PID(float ref, float pitch, uint8_t pid_flag)
 {
@@ -115,47 +115,51 @@ ret_val_t pwm_handler(TIM_HandleTypeDef *htim, M_axis_t *axis, uint16_t encoder_
         chA = TIM_CHANNEL_4;
         chB = TIM_CHANNEL_3;
     }
-    if(axis->desired_value == HOME_OFFSET)
-    {
-        if(axis == &axis1)
-        {
-            while(axis1_chk != 1)
-            {
-                __HAL_TIM_SET_COMPARE(htim, chA, MAX_PWM);
-                __HAL_TIM_SET_COMPARE(htim, chB, 0);
-            }
-//            axis1_chk = 0;
-            __HAL_TIM_SET_COMPARE(htim, chA, 0);
-        }
-//        if(axis == &axis2)
+//    axis1_chk = 0;
+//    axis2_chk = 0;
+//    axis3_chk = 0;
+//    axis4_chk = 0;
+//    if(sVehicalParams.Vy != 0 && sVehicalParams.Vx == 0 && sVehicalParams.W == 0)
+//    {
+//        if(axis == &axis1)
 //        {
-//            while(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_3) != 1)
+//            while(axis1_chk != 1)
 //            {
-//                __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+//                __HAL_TIM_SET_COMPARE(htim, chA, MAX_PWM);
 //                __HAL_TIM_SET_COMPARE(htim, chB, 0);
 //            }
+////            axis1_chk = 0;
+//            __HAL_TIM_SET_COMPARE(htim, chA, 0);
 //        }
-        if(axis == &axis3)
-        {
-            while(axis3_chk != 1)
-            {
-                __HAL_TIM_SET_COMPARE(htim, chA, MAX_PWM);
-                __HAL_TIM_SET_COMPARE(htim, chB, 0);
-            }
-//            axis3_chk = 0;
-            __HAL_TIM_SET_COMPARE(htim, chA, 0);
-        }
-        if(axis == &axis4)
-        {
-            while(axis4_chk != 1)
-            {
-                __HAL_TIM_SET_COMPARE(htim, chA, MAX_PWM);
-                __HAL_TIM_SET_COMPARE(htim, chB, 0);
-            }
-//            axis4_chk = 0;
-            __HAL_TIM_SET_COMPARE(htim, chA, 0);
-        }
-    }
+////        if(axis == &axis2)
+////        {
+////            while(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_3) != 1)
+////            {
+////                __HAL_TIM_SET_COMPARE(htim, chA, axis->pwm);
+////                __HAL_TIM_SET_COMPARE(htim, chB, 0);
+////            }
+////        }
+//        if(axis == &axis3)
+//        {
+//            while(axis3_chk != 1)
+//            {
+//                __HAL_TIM_SET_COMPARE(htim, chA, MAX_PWM);
+//                __HAL_TIM_SET_COMPARE(htim, chB, 0);
+//            }
+////            axis3_chk = 0;
+//            __HAL_TIM_SET_COMPARE(htim, chA, 0);
+//        }
+//        if(axis == &axis4)
+//        {
+//            while(axis4_chk != 1)
+//            {
+//                __HAL_TIM_SET_COMPARE(htim, chA, MAX_PWM);
+//                __HAL_TIM_SET_COMPARE(htim, chB, 0);
+//            }
+////            axis4_chk = 0;
+//            __HAL_TIM_SET_COMPARE(htim, chA, 0);
+//        }
+//    }
 
     /*1500 ~ 360 degree => coefficient = 1500/360*/
 //    if (axis->desired_value != 0)

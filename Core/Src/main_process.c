@@ -11,9 +11,13 @@ extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart6;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
+extern uint8_t axis1_chk;
+extern uint8_t axis2_chk;
+extern uint8_t axis3_chk;
+extern uint8_t axis4_chk;
 S_PROCESS sProcess;
 uint8_t RotateOK;
-
+ret_val_t home_flag = 0;
 static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
 {
 	bool flagFinishTask = false;
@@ -75,6 +79,58 @@ void main_process()
 //        if(0 == sModule4Params.targetAngle)
 //            sModule4Params.targetAngle = 1;
         axis4.angle = sModule4Params.targetAngle;
+
+//        if(sVehicalParams.Vy != 0 && sVehicalParams.Vx == 0 && sVehicalParams.W == 0 \
+//                && axis1_chk == 1 && axis2_chk == 1 && axis3_chk == 1 && axis4_chk == 1)
+//        {
+//            axis1_chk = 0;
+//            axis2_chk = 0;
+//            axis3_chk = 0;
+//            axis4_chk = 0;
+//        }
+         if(sVehicalParams.Vy != 0 && sVehicalParams.Vx == 0 && sVehicalParams.W == 0 \
+                && home_flag != SUCCESSFUL)
+         {
+             home_flag = auto_home();
+//              __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
+//              __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, HOME_SPEED);
+//
+//              __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 0);
+//              __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, HOME_SPEED);
+//
+//              __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);
+//              __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, HOME_SPEED);
+//
+//              __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 0);
+//              __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, HOME_SPEED);
+//
+//
+//              while((axis1_chk != 1) || (axis2_chk != 1) || (axis3_chk != 1) || (axis4_chk != 1))
+//              {
+//                  /*Check each motor if reaching end stop*/
+//                  if(HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_15) == 1)
+//                  {
+//                      __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 0);
+//                      axis1_chk = 1;
+//                  }
+//                  if(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_3) == 1)
+//                  {
+//                      __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, 0);
+//                      axis2_chk = 1;
+//                  }
+//                  if(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_4) == 1)
+//                  {
+//                      __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);
+//                      axis3_chk = 1;
+//
+//                  }
+//                  if(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_5) == 1)
+//                  {
+//                      __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 0);
+//                      axis4_chk = 1;
+//                  }
+
+         }
                     pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
                     pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
                     pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
