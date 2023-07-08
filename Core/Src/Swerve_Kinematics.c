@@ -44,10 +44,10 @@ void Swerve_CoefitionCal(float Vx,float Vy, float w)
 
     float r;
     r = sqrt((BASE_LENGHT*BASE_LENGHT)+(BASE_WIDTH*BASE_WIDTH))/2;
-    A = Vx-w*(BASE_LENGHT/r);
-    B = Vx+w*(BASE_LENGHT/r);
-    C = Vy-w*(BASE_WIDTH/r);
-    D = Vy+w*(BASE_WIDTH/r);
+    A = Vx-w*(BASE_WIDTH/r);
+    B = Vx+w*(BASE_WIDTH/r);
+    C = Vy-w*(BASE_LENGHT/r);
+    D = Vy+w*(BASE_LENGHT/r);
 
 //      A = Vx-w*(BASE_LENGHT/2);
 //      B = Vx+w*(BASE_LENGHT/2);
