@@ -50,6 +50,10 @@ void USART2_IRQHandler(void)
       {
           s_UART_handler.dataValid = 1;
           s_UART_handler.index = 0;
+          if(s_UART_handler.params[1] == 1 && s_UART_handler.params[2] == 1 && s_UART_handler.params[3] == 1)
+          {
+              NVIC_SystemReset();
+          }
       }
       break;
   }
@@ -93,6 +97,7 @@ extern ret_val_t home_flag;
 void UART2_Handler()
 {
 //    if(test)
+//    if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24)
     if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x00)//s_UART_handler.params[1]= 0x00: che do bthg
     {
         memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
@@ -104,6 +109,12 @@ void UART2_Handler()
         convert_hex2float(&sVehicalParams.W, &sResultData.rawDataw[0]);
         s_UART_handler.dataValid = 0;
         KinematicsHandler();
+//        SCB->AIRCR = ((0x5FA << SCB_AIRCR_VECTKEY_Pos) |
+//                      SCB_AIRCR_SYSRESETREQ_Msk);
+//        for(;;)
+//        {
+//            /* wait until reset */
+//        }
         pre = HAL_GetTick();
         memset(&s_UART_handler.params[0],'\0',16);
         home_flag = ERR;
@@ -127,6 +138,7 @@ void UART2_Handler()
         pre = HAL_GetTick();
         memset(&s_UART_handler.params[0],'\0',16);
     }
+
 //    memset(&s_UART_handler.params[0],'\0',16);
 }
 

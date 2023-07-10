@@ -193,10 +193,15 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   auto_home();
+          HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
+          HAL_Delay(150);
+          HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
+          HAL_Delay(150);
 //  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
   while (1)
   {
       main_process();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
