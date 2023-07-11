@@ -70,21 +70,25 @@ void main_process()
 
         axis3.angle = sModule3Params.targetAngle;
 
-        axis4.angle = sModule4Params.targetAngle;
-        if ( HAL_GetTick() - pre <= 10000)
-        {
-            pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
-            pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
-            pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
-            pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
-        }
-        else
-        {
-            axis1.pwm = 0;
-            axis2.pwm = 0;
-            axis3.pwm = 0;
-            axis4.pwm = 0;
-        }
+//        axis4.angle = sModule4Params.targetAngle;
+        pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
+        pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
+        pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
+//        pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
+//        if ( HAL_GetTick() - pre <= 10000)
+//        {
+//            pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
+//            pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
+//            pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
+//            pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
+//        }
+//        else
+//        {
+//            axis1.pwm = 0;
+//            axis2.pwm = 0;
+//            axis3.pwm = 0;
+//            axis4.pwm = 0;
+//        }
 
 		sProcess.process = UARThandler;
 		break;
