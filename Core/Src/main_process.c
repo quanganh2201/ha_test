@@ -15,6 +15,7 @@ extern uint8_t axis1_chk;
 extern uint8_t axis2_chk;
 extern uint8_t axis3_chk;
 extern uint8_t axis4_chk;
+extern uint32_t pre;
 S_PROCESS sProcess;
 ret_val_t home_flag = 0;
 static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
@@ -35,7 +36,6 @@ static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
 	}
 	return flagFinishTask;
 }
-extern uint32_t pre;
 void main_process()
 {
 	switch (sProcess.process)
