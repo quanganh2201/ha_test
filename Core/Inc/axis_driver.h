@@ -30,7 +30,7 @@ typedef struct
     uint16_t angle;
     uint32_t desired_value;
     pwm_pin_set_t channel_pin_set; /*0: ch1 ch2, 1: ch3 ch4*/
-    dir_t dir; /*direction of motor*/
+    volatile dir_t dir; /*direction of motor*/
 }M_axis_t;
 
 extern M_axis_t axis1;

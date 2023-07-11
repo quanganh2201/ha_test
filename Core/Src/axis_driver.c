@@ -37,6 +37,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 //        axis1_chk = 1;
 //
 //    }
+
 }
 uint16_t PID(float ref, float pitch, uint8_t pid_flag)
 {
@@ -54,25 +55,26 @@ uint16_t PID(float ref, float pitch, uint8_t pid_flag)
     {
         error = (pitch - ref);
     }
-
+    DT = msTicks - previousTime;
     //calculate Proportional term
     P = Kp * error;
 
 ////    calculate Integral term. Account for wind-up
     i_err+= error;
     if(pid_flag==1)
-        I =Ki* i_err;
+        I = Ki* i_err;
     else
-        I =0.5*i_err; // If the robot has to move the Ki term should be lower so there are less oscillation
+        I = 0.5*i_err; // If the robot has to move the Ki term should be lower so there are less oscillation
+
 
     if (I > MAX_PWM)
         I = MAX_PWM;
     else if (I<MIN_PWM){
-        I=MIN_PWM;
+        I = MIN_PWM;
     }
 
     ////calculate Derivative term
-    D = Kd * (error - lastError); //dt;
+    D = Kd * (error - lastError)/ DT; //dt;
 //    previousTime = HAL_GetTick();
     // If the robot has to move the control low is PI so the movement is more fluid
     if(pid_flag == 0){
@@ -87,7 +89,7 @@ uint16_t PID(float ref, float pitch, uint8_t pid_flag)
         out_pwm = MAX_PWM;
     else if (pid_pwm < MIN_PWM)
         out_pwm = MIN_PWM;
-
+    previousTime = msTicks;
     lastError = error;
 
     return out_pwm;

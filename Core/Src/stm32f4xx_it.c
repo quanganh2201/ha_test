@@ -274,6 +274,7 @@ void EXTI15_10_IRQHandler(void)
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
+
 /**
   * @brief This function handles TIM5 global interrupt.
   */

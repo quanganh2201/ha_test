@@ -80,6 +80,7 @@ void main_process()
 		pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
 		pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
 
+
 		sProcess.process = UARThandler;
 		break;
 	default:

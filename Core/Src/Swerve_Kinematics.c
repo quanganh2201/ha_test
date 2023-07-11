@@ -18,6 +18,7 @@ S_MODULE_PARAMS sModule4Params;
 int Swerve_reverseSpeedFlag[4] ;
 int Swerve_angleOptimization(float inputAngle,uint8_t wheelN0)
 {
+
     int suitableAngle;
     if((inputAngle >= -180) && (inputAngle<0))
     {
@@ -190,6 +191,7 @@ void KinematicsHandler()
     sModule2Params.speed = (sModule2Params.speed < -1000) ? -1000 : sModule2Params.speed;
     sModule3Params.speed = (sModule3Params.speed < -1000) ? -1000 : sModule3Params.speed;
     sModule4Params.speed = (sModule4Params.speed < -1000) ? -1000 : sModule4Params.speed;
+
 }
 
 
