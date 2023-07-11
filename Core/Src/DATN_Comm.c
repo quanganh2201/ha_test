@@ -5,6 +5,7 @@
  *      Author: longn
  */
 #include"DATN_Comm.h"
+#include "axis_driver.h"
 #include "string.h"
 S_SPI_RECEIVE s_SPI_handler;
 S_UART_RECEIVE s_UART_handler;
@@ -15,15 +16,6 @@ void Init_UART_Recv()
   HAL_UART_Receive_IT(&huart2, &s_UART_handler.Rx, 1);
 }
 
-
-
-//void dataProcessing()
-//{
-//  if(s_SPI_handler.dataValid == true)
-//  {
-//      s_SPI_handler.params[s_SPI_handler.index-1]
-//  }
-//}
 
 
 
@@ -49,6 +41,11 @@ void USART2_IRQHandler(void)
       {
           s_UART_handler.dataValid = 1;
           s_UART_handler.index = 0;
+          /*Reset chip cmd*/
+          if(s_UART_handler.params[1] == 1 && s_UART_handler.params[2] == 1 && s_UART_handler.params[3] == 1)
+          {
+              NVIC_SystemReset();
+          }
       }
       break;
   }
@@ -86,9 +83,12 @@ void convert_float2hex(float *fVal, uint8_t* targetHexVal)
  */
 S_RESULT_DATA sResultData;
 uint32_t pre;
+uint8_t test;
 //extern S_VEHICAL_PARAMS sVehicalParams;
+extern ret_val_t home_flag;
 void UART2_Handler()
 {
+//    if(test)
     if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x00)//s_UART_handler.params[1]= 0x00: che do bthg
     {
         memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
@@ -102,6 +102,8 @@ void UART2_Handler()
         KinematicsHandler();
         pre = HAL_GetTick();
         memset(&s_UART_handler.params[0],'\0',16);
+        home_flag = ERR;
+        test = 0;
     }
     else if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x01)//s_UART_handler.params[1]= 0x00: che do chi quay goc
     {
@@ -121,6 +123,7 @@ void UART2_Handler()
         pre = HAL_GetTick();
         memset(&s_UART_handler.params[0],'\0',16);
     }
+
 }
 
 
