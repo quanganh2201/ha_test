@@ -236,14 +236,7 @@ ret_val_t auto_home()
             axis4_flag = 1;
         }
     }
-    /*Blynk led to notice*/
-    for(i = 0; i < 10; i++)
-    {
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
-        HAL_Delay(150);
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
-        HAL_Delay(150);
-    }
+
     /*reset count value*/
     ret_val = SUCCESSFUL;
     return ret_val;

@@ -141,12 +141,13 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  int i = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+
 
     HAL_Init();
 
@@ -193,10 +194,16 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   auto_home();
-          HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
-          HAL_Delay(150);
-          HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
-          HAL_Delay(150);
+
+  /*Blynk led to notice*/
+
+    for(i = 0; i < 10; i++)
+    {
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
+        HAL_Delay(150);
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
+        HAL_Delay(150);
+    }
 //  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
   while (1)
   {
