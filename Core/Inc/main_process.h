@@ -31,9 +31,12 @@ typedef struct
 
 enum task_stt
 {
-	UARThandler,
-	sendBLDC,
-	adjustAngle
+//	UARThandler,
+//	sendBLDC,
+//	adjustAngle
+    UARThandler,
+    adjustAngle,
+    sendBLDC
 };
 
 typedef enum

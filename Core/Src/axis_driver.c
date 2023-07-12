@@ -55,7 +55,7 @@ uint16_t PID(float ref, float pitch, uint8_t pid_flag)
     {
         error = (pitch - ref);
     }
-    DT = msTicks - previousTime;
+//    DT = msTicks - previousTime;
     //calculate Proportional term
     P = Kp * error;
 
@@ -74,7 +74,7 @@ uint16_t PID(float ref, float pitch, uint8_t pid_flag)
     }
 
     ////calculate Derivative term
-    D = Kd * (error - lastError)/ DT; //dt;
+    D = Kd * (error - lastError);// DT; //dt;
 //    previousTime = HAL_GetTick();
     // If the robot has to move the control low is PI so the movement is more fluid
     if(pid_flag == 0){
@@ -89,7 +89,7 @@ uint16_t PID(float ref, float pitch, uint8_t pid_flag)
         out_pwm = MAX_PWM;
     else if (pid_pwm < MIN_PWM)
         out_pwm = MIN_PWM;
-    previousTime = msTicks;
+//    previousTime = msTicks;
     lastError = error;
 
     return out_pwm;

@@ -18,6 +18,9 @@ extern uint8_t axis4_chk;
 extern uint32_t pre;
 S_PROCESS sProcess;
 ret_val_t home_flag = 0;
+uint32_t preTime = 0;
+uint32_t timeInterval = 0;
+
 static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
 {
 	bool flagFinishTask = false;
@@ -38,15 +41,27 @@ static bool SendBLDCTimeout(uint16_t Timeout, FlagStatus1 eStatus)
 }
 void main_process()
 {
+
 	switch (sProcess.process)
 	{
 	case UARThandler:
+    timeInterval = HAL_GetTick() - preTime;
 		UART2_Handler();
 		sProcess.process++;
 		break;
 	case sendBLDC:
-		if (SendBLDCTimeout(100, SET1))
+
+//	    while(timeInterval < 10000)
+//	    {
+//	        timeInterval = HAL_GetTick() - preTime;
+//	    }
+
+		if (SendBLDCTimeout(100, SET1) && timeInterval > 2000)
 		{
+//        timeInterval = 0;
+//        preTime = HAL_GetTick();
+//        timeInterval = HAL_GetTick() - preTime;
+
 			sProcess.frameFront[0] = 0xABCD;
 			sProcess.frameFront[1] = sModule2Params.speed;
 			sProcess.frameFront[2] = sModule1Params.speed;
@@ -59,10 +74,15 @@ void main_process()
 			HAL_UART_Transmit(&huart6, (uint8_t *)sProcess.frameRear, sizeof(sProcess.frameRear), 10);
 			SendBLDCTimeout(100, RESET1);
 		}
-		sProcess.process++;
+
+		sProcess.process = UARThandler;
 		break;
 	case adjustAngle:
-
+	    if(axis1.angle != sModule1Params.targetAngle || axis2.angle != sModule2Params.targetAngle)
+	    {
+	        preTime = HAL_GetTick();
+	    timeInterval = 0;
+	    }
 		axis1.angle = sModule1Params.targetAngle;
 
 		axis2.angle = sModule2Params.targetAngle;
@@ -75,13 +95,17 @@ void main_process()
 		{
 			home_flag = auto_home();
 		}
+		/*Wait till reaching stop*/
+//		preTime = HAL_GetTick();
+
 		pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
 		pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
 		pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
 		pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
 
 
-		sProcess.process = UARThandler;
+
+		sProcess.process++;
 		break;
 	default:
 		sProcess.process = UARThandler;
