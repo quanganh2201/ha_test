@@ -27,8 +27,16 @@ int Swerve_angleOptimization(float inputAngle,uint8_t wheelN0)
     }
     else
     {
-        suitableAngle = inputAngle;
-        Swerve_reverseSpeedFlag[wheelN0-1] = 1;
+        if(inputAngle==180)
+        {
+            suitableAngle = 0;
+            Swerve_reverseSpeedFlag[wheelN0-1] = -1;
+        }
+        else
+        {
+            suitableAngle = inputAngle;
+            Swerve_reverseSpeedFlag[wheelN0-1] = 1;
+        }
         //sModule1Params.reverseVel
     }
     return (int)suitableAngle;
@@ -38,11 +46,11 @@ int Swerve_angleOptimization(float inputAngle,uint8_t wheelN0)
 void Swerve_CoefitionCal(float Vx,float Vy, float w)
 {
     float r;
-    r = sqrt((BASE_LENGHT*BASE_LENGHT)+(BASE_WIDTH*BASE_WIDTH))/2;
+    r = sqrt((BASE_LENGHT*BASE_LENGHT)+(BASE_WIDTH*BASE_WIDTH))/2;//0.376431
     A = Vx-w*(BASE_WIDTH/r);
-    B = Vx+w*(BASE_WIDTH/r);
-    C = Vy-w*(BASE_LENGHT/r);
-    D = Vy+w*(BASE_LENGHT/r);
+    B = Vx+w*(BASE_WIDTH/r);/*Vy = 1, W = 0 => B = 0*/
+    C = Vy-w*(BASE_LENGHT/r);/*C = 1*/
+    D = Vy+w*(BASE_LENGHT/r);/*Vy = 1, => D = 1*/
 }
 
 float Swerve_Speed(uint8_t wheelN0)
@@ -119,7 +127,7 @@ int Swerve_Angle(uint8_t wheelN0)
         }
         else
         {
-            tmp = atan2(B,C)*180/PI;
+            tmp = atan2(B,C)*180/PI;/*Vy = 0=> temp = 0*/
         }
         break;
     case 2:

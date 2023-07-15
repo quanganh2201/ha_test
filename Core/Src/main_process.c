@@ -56,7 +56,7 @@ void main_process()
 //	        timeInterval = HAL_GetTick() - preTime;
 //	    }
 
-		if (SendBLDCTimeout(100, SET1) && timeInterval > 2000)
+		if (SendBLDCTimeout(100, SET1) && timeInterval > 0)
 		{
 //        timeInterval = 0;
 //        preTime = HAL_GetTick();
