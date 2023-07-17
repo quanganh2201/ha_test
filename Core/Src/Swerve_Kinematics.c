@@ -172,11 +172,21 @@ int Swerve_Angle(uint8_t wheelN0)
 void KinematicsHandler()
 {
     Swerve_CoefitionCal(sVehicalParams.Vx,sVehicalParams.Vy,sVehicalParams.W);
+    if(sVehicalParams.Vx == 0 && sVehicalParams.Vy == 0 && sVehicalParams.W == 0)
+    {
+        sModule1Params.targetAngle = 90;
+        sModule2Params.targetAngle = 90;
+        sModule3Params.targetAngle = 90;
+        sModule4Params.targetAngle = 90;
+    }
+    else
+    {
+        sModule1Params.targetAngle = Swerve_Angle(1)&0xFF;
+        sModule2Params.targetAngle = Swerve_Angle(2)&0xFF;
+        sModule3Params.targetAngle = Swerve_Angle(3)&0xFF;
+        sModule4Params.targetAngle = Swerve_Angle(4)&0xFF;
 
-    sModule1Params.targetAngle = Swerve_Angle(1)&0xFF;
-    sModule2Params.targetAngle = Swerve_Angle(2)&0xFF;
-    sModule3Params.targetAngle = Swerve_Angle(3)&0xFF;
-    sModule4Params.targetAngle = Swerve_Angle(4)&0xFF;
+    }
 
     sModule1Params.reverseVel = Swerve_reverseSpeedFlag[1-1];
     sModule2Params.reverseVel = Swerve_reverseSpeedFlag[2-1];
