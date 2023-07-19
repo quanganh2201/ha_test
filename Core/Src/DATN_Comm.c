@@ -9,6 +9,11 @@
 #include "string.h"
 S_SPI_RECEIVE s_SPI_handler;
 S_UART_RECEIVE s_UART_handler;
+S_RESULT_DATA sResultData;
+uint32_t pre;
+uint8_t test;
+//extern S_VEHICAL_PARAMS sVehicalParams;
+extern ret_val_t home_flag;
 extern UART_HandleTypeDef huart2;
 
 void Init_UART_Recv()
@@ -81,11 +86,6 @@ void convert_float2hex(float *fVal, uint8_t* targetHexVal)
  * @brief:  Xu ly du lieu nhan ve tu UART
  * @note:   Tra ve gia tri float cho sResultData.Vx,sResultData.Vy,sResultData.W
  */
-S_RESULT_DATA sResultData;
-uint32_t pre;
-uint8_t test;
-//extern S_VEHICAL_PARAMS sVehicalParams;
-extern ret_val_t home_flag;
 void UART2_Handler()
 {
 //    if(test)

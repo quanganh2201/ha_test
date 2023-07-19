@@ -51,17 +51,9 @@ void main_process()
 		break;
 	case sendBLDC:
 
-//	    while(timeInterval < 10000)
-//	    {
-//	        timeInterval = HAL_GetTick() - preTime;
-//	    }
 
 		if (SendBLDCTimeout(100, SET1) && timeInterval > 0)
 		{
-//        timeInterval = 0;
-//        preTime = HAL_GetTick();
-//        timeInterval = HAL_GetTick() - preTime;
-
 			sProcess.frameFront[0] = 0xABCD;
 			sProcess.frameFront[1] = sModule2Params.speed;
 			sProcess.frameFront[2] = sModule1Params.speed;
@@ -81,7 +73,7 @@ void main_process()
 	    if(axis1.angle != sModule1Params.targetAngle || axis2.angle != sModule2Params.targetAngle)
 	    {
 	        preTime = HAL_GetTick();
-	    timeInterval = 0;
+	        timeInterval = 0;
 	    }
 		axis1.angle = sModule1Params.targetAngle;
 
@@ -97,12 +89,10 @@ void main_process()
 		}
 		/*Wait till reaching stop*/
 //		preTime = HAL_GetTick();
-
 		pwm_handler(&htim3, &axis1, cnt1, CH1_CH2);
 		pwm_handler(&htim3, &axis2, cnt2, CH3_CH4);
 		pwm_handler(&htim4, &axis3, cnt3, CH1_CH2);
 		pwm_handler(&htim4, &axis4, cnt4, CH3_CH4);
-
 
 
 		sProcess.process++;
