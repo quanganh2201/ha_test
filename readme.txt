@@ -30,5 +30,11 @@ Yellow: PA0
 Green: PB13
 Home: B5
 ----------------------------
-UART2: PA2-Tx; PA3-Rx
-UART6: PA11-Tx; PA12-Rx
+UART2: 
+PA2-Tx: send data to hover board
+PA3-Rx: Receive CMD from PC
+----------------------------
+UART6: 
+PA11-Tx: send data to hover board
+PA12-Rx:
+----------------------------
