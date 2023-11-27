@@ -88,7 +88,7 @@ void convert_float2hex(float *fVal, uint8_t* targetHexVal)
  */
 void UART2_Handler()
 {
-//    if(test)
+//    if(test == 1)
     if (s_UART_handler.dataValid == 1 && s_UART_handler.params[0] == 0x24 && s_UART_handler.params[1] == 0x00)//s_UART_handler.params[1]= 0x00: che do bthg
     {
         memcpy(&sResultData.rawDatax[0],&s_UART_handler.params[VxOFFSET],4);
